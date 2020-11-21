@@ -1,21 +1,19 @@
 import React, { Component } from "react";
+import GameScreen from "./gameScreen";
 import axios from "axios";
 import randomWords from "random-words";
-
-// Need only single word: not phrase => split result and check if length of array === 1;
-// Need word to have a synonym property
+import GameOver from "./gameOver";
+import RulesPage from "./rulesPage";
 
 class Game extends Component {
-  state = { word: "", synonyms: [], lives: 3, score: 0, guess: "" };
-
-  async getNewWord() {
-    const word = randomWords();
-    const { data: synonyms } = await axios.get(
-      `https://api.datamuse.com/words?ml=${word}`
-    );
-    this.setState({ word, synonyms });
-    console.log(this.state);
-  }
+  state = {
+    word: "",
+    synonyms: [],
+    lives: 3,
+    score: 0,
+    guess: "",
+    gamePage: true,
+  };
 
   componentDidMount() {
     this.getNewWord();
@@ -26,46 +24,91 @@ class Game extends Component {
     const synonymArray = [];
     this.state.synonyms.forEach((e) => synonymArray.push(e.word));
     if (synonymArray.includes(this.state.guess)) {
-      this.state.score += 1;
+      const score = this.state.score + 1;
+      this.setState({ score, guess: "" });
     } else {
-      this.state.lives -= 1;
+      const lives = this.state.lives - 1;
+      this.setState({ lives, guess: "" });
     }
-    this.state.guess = "";
+
+    const element = document.getElementById("synonymGuess");
+    element.focus();
   };
+
+  async getNewWord() {
+    const word = randomWords();
+    const { data: synonyms } = await axios.get(
+      `https://api.datamuse.com/words?ml=${word}`
+    );
+    this.setState({ word, synonyms });
+  }
 
   handleChange = (e) => {
     const guess = e.currentTarget.value;
     this.setState({ guess });
   };
 
+  handlePlayAgain = () => {
+    const lives = 3;
+    const score = 0;
+    this.setState({ lives, score });
+  };
+
+  handleSynonymGameClick() {
+    const gamePage = true;
+    this.setState({ gamePage });
+    console.log("game clicked");
+  }
+
+  handleRulesClick() {
+    const gamePage = false;
+    this.setState({ gamePage });
+    console.log("rules clicked");
+  }
+
   render() {
+    const { lives, word, score, guess } = this.state;
+    if (lives === 0) {
+      return <GameOver score={score} handlePlayAgain={this.handlePlayAgain} />;
+    }
     return (
-      <div class="jumbotron jumbotron-fluid mx-5 mt-5">
-        <div class="container">
-          <h1 class="display-4 d-flex justify-content-center row">
-            {this.state.word}
-          </h1>
-          <label for="exampleInputEmail1">Synonym Guess</label>
-          <div className="row justify-content-between mb-5">
-            <input
-              type="text"
-              class="form-control col-10"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              onChange={this.handleChange}
-            ></input>
+      <div className="vh-100">
+        <div
+          className="container col-sm- m-5 bg-light d-flex flex-column mx-auto"
+          style={{ height: "420px" }}
+        >
+          <div className="row">
             <button
-              type="button"
-              class="btn btn-primary col-2"
-              onClick={this.handleSubmit}
+              class="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
+              onClick={() => this.handleSynonymGameClick()}
             >
-              Submit
+              Synonym Game
+            </button>
+            <button
+              class="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
+              onClick={() => this.handleRulesClick()}
+            >
+              Rules
             </button>
           </div>
-          <div class="row align-items-end">
-            <div class="col-sm">Lives: {this.state.lives}</div>
-            <div class="col-sm">Score: {this.state.score}</div>
-          </div>
+          {this.state.gamePage && (
+            <GameScreen
+              lives={lives}
+              word={word}
+              score={score}
+              guess={guess}
+              handleSubmit={this.handleSubmit}
+              handleChange={this.handleChange}
+              handleSynonymGameClick={this.handleSynonymGameClick}
+              handleRulesClick={this.handleRulesClick}
+            />
+          )}
+          {!this.state.gamePage && (
+            <RulesPage
+              handleRulesClick={this.handleRulesClick}
+              handleSynonymGameClick={this.handleSynonymGameClick}
+            />
+          )}
         </div>
       </div>
     );
