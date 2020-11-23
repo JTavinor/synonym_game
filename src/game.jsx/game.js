@@ -1,116 +1,111 @@
 import React, { Component } from "react";
-import GameScreen from "./gameScreen";
 import axios from "axios";
 import randomWords from "random-words";
+import GameScreen from "./gameScreen";
 import GameOver from "./gameOver";
 import RulesPage from "./rulesPage";
+import Leaderboard from "./leaderboard";
 
 class Game extends Component {
   state = {
-    word: "",
+    currentWord: "",
     synonyms: [],
     lives: 3,
     score: 0,
-    guess: "",
+    userGuess: "",
     gamePage: true,
   };
+
+  async getNewWord() {
+    const newWord = randomWords();
+    const { data: synonymArray } = await axios.get(
+      `https://api.datamuse.com/words?ml=${newWord}`
+    );
+
+    const synonyms = [];
+    synonymArray.forEach((e) => synonyms.push(e.word));
+
+    this.setState({ currentWord: newWord, synonyms });
+  }
 
   componentDidMount() {
     this.getNewWord();
   }
 
-  handleSubmit = async () => {
-    this.getNewWord();
-    const synonymArray = [];
-    this.state.synonyms.forEach((e) => synonymArray.push(e.word));
-    if (synonymArray.includes(this.state.guess)) {
-      const score = this.state.score + 1;
-      this.setState({ score, guess: "" });
+  handleSubmitGuess = () => {
+    let { synonyms, userGuess, score, lives } = this.state;
+
+    if (synonyms.includes(userGuess)) {
+      score += 1;
+      this.setState({ score, userGuess: "" });
     } else {
-      const lives = this.state.lives - 1;
-      this.setState({ lives, guess: "" });
+      lives -= 1;
+      this.setState({ lives, userGuess: "" });
     }
 
-    const element = document.getElementById("synonymGuess");
-    element.focus();
-  };
+    this.getNewWord();
 
-  async getNewWord() {
-    const word = randomWords();
-    const { data: synonyms } = await axios.get(
-      `https://api.datamuse.com/words?ml=${word}`
-    );
-    this.setState({ word, synonyms });
-  }
+    const inputField = document.getElementById("synonymGuess");
+    inputField.focus();
+  };
 
   handleChange = (e) => {
-    const guess = e.currentTarget.value;
-    this.setState({ guess });
+    const userGuess = e.currentTarget.value;
+    this.setState({ userGuess });
   };
 
-  handlePlayAgain = () => {
+  handleSynonymGameTab = () => {
+    const gamePage = true;
+    this.setState({ gamePage });
+  };
+
+  handleRulesTab = () => {
+    const gamePage = false;
+    this.setState({ gamePage });
+  };
+
+  handlePlayAgain = async (name, points) => {
+    await axios.post("http://localhost:5000/", {
+      name: name || "unknown",
+      score: points,
+    });
+
     const lives = 3;
     const score = 0;
     this.setState({ lives, score });
   };
 
-  handleSynonymGameClick() {
-    const gamePage = true;
-    this.setState({ gamePage });
-    console.log("game clicked");
-  }
-
-  handleRulesClick() {
-    const gamePage = false;
-    this.setState({ gamePage });
-    console.log("rules clicked");
-  }
-
   render() {
-    const { lives, word, score, guess } = this.state;
+    const { lives, currentWord: word, score, userGuess: guess } = this.state;
     if (lives === 0) {
-      return <GameOver score={score} handlePlayAgain={this.handlePlayAgain} />;
+      return (
+        <div>
+          <GameOver score={score} handlePlayAgain={this.handlePlayAgain} />{" "}
+          <Leaderboard apiRoute={"http://localhost:5000/"} />
+        </div>
+      );
     }
     return (
-      <div className="vh-100">
-        <div
-          className="container col-sm- m-5 bg-light d-flex flex-column mx-auto"
-          style={{ height: "420px" }}
-        >
-          <div className="row">
-            <button
-              class="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
-              onClick={() => this.handleSynonymGameClick()}
-            >
-              Synonym Game
-            </button>
-            <button
-              class="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
-              onClick={() => this.handleRulesClick()}
-            >
-              Rules
-            </button>
-          </div>
-          {this.state.gamePage && (
-            <GameScreen
-              lives={lives}
-              word={word}
-              score={score}
-              guess={guess}
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              handleSynonymGameClick={this.handleSynonymGameClick}
-              handleRulesClick={this.handleRulesClick}
-            />
-          )}
-          {!this.state.gamePage && (
-            <RulesPage
-              handleRulesClick={this.handleRulesClick}
-              handleSynonymGameClick={this.handleSynonymGameClick}
-            />
-          )}
-        </div>
-      </div>
+      <React.Fragment>
+        {(this.state.gamePage && (
+          <GameScreen
+            lives={lives}
+            word={word}
+            score={score}
+            guess={guess}
+            handleSubmit={this.handleSubmitGuess}
+            handleChange={this.handleChange}
+            handleSynonymGameClick={this.handleSynonymGameTab}
+            handleRulesClick={this.handleRulesTab}
+          />
+        )) || (
+          <RulesPage
+            handleSynonymGameClick={this.handleSynonymGameTab}
+            handleRulesClick={this.handleRulesTab}
+          />
+        )}
+        <Leaderboard apiRoute={"http://localhost:5000/"} />
+      </React.Fragment>
     );
   }
 }

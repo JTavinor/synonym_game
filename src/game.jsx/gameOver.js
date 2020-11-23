@@ -1,6 +1,14 @@
 import React, { Component } from "react";
+import axios from "axios";
 
 class GameOver extends Component {
+  state = { name: "" };
+
+  handleChange = (e) => {
+    const name = e.currentTarget.value;
+    this.setState({ name });
+  };
+
   render() {
     return (
       <div
@@ -13,13 +21,25 @@ class GameOver extends Component {
         <div className="row justify-content-md-center">
           <p>You scored {this.props.score} points</p>
         </div>
-        <div className="row justify-content-md-center mb-auto">
+        <div className="row justify-content-md-center">
+          <label className="col-4">
+            Enter your name to add your score to the leaderboard!
+          </label>
+          <input
+            className="col-4"
+            id="name"
+            onChange={this.handleChange}
+          ></input>
+        </div>
+        <div className="row justify-content-md-center my-auto">
           <button
             type="button"
-            class="btn btn-primary col-2"
-            onClick={() => this.props.handlePlayAgain()}
+            className="btn btn-primary col-2"
+            onClick={() =>
+              this.props.handlePlayAgain(this.state.name, this.props.score)
+            }
           >
-            Play again
+            Add score and Play again
           </button>
         </div>
       </div>
