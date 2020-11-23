@@ -1,11 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
-import randomWords from "random-words";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-
-// Heart ICON
-// <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} />
 
 class GameScreen extends Component {
   renderLives = () => {
@@ -24,7 +19,7 @@ class GameScreen extends Component {
   };
 
   render() {
-    const { lives, word, score, guess } = this.props;
+    const { currentWord, score, userGuess } = this.props;
 
     return (
       <div className="vh-auto">
@@ -47,7 +42,7 @@ class GameScreen extends Component {
             </button>
           </div>
           <div className="row justify-content-md-center p-5 mt-auto">
-            <h1 className="text-capitalize display-4">{word}</h1>
+            <h1 className="text-capitalize display-4">{currentWord}</h1>
           </div>
           <div className="row justify-content-md-center align-items-center">
             <input
@@ -56,7 +51,7 @@ class GameScreen extends Component {
               id="synonymGuess"
               aria-describedby="emailHelp"
               placeholder="Synonym Guess"
-              value={guess}
+              value={userGuess}
               onChange={(e) => this.props.handleChange(e)}
             ></input>
             <button

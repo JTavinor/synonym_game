@@ -76,7 +76,7 @@ class Game extends Component {
   };
 
   render() {
-    const { lives, currentWord: word, score, userGuess: guess } = this.state;
+    const { lives, currentWord, score, userGuess } = this.state;
     if (lives === 0) {
       return (
         <div>
@@ -87,18 +87,19 @@ class Game extends Component {
     }
     return (
       <React.Fragment>
-        {(this.state.gamePage && (
+        {this.state.gamePage && (
           <GameScreen
             lives={lives}
-            word={word}
+            currentWord={currentWord}
             score={score}
-            guess={guess}
+            userGuess={userGuess}
             handleSubmit={this.handleSubmitGuess}
             handleChange={this.handleChange}
             handleSynonymGameClick={this.handleSynonymGameTab}
             handleRulesClick={this.handleRulesTab}
           />
-        )) || (
+        )}
+        {!this.state.gamePage && (
           <RulesPage
             handleSynonymGameClick={this.handleSynonymGameTab}
             handleRulesClick={this.handleRulesTab}
