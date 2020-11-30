@@ -21,16 +21,22 @@ class GameOver extends Component {
         <div className="row justify-content-md-center">
           <p>You scored {this.props.score} points</p>
         </div>
-        <div className="row justify-content-md-center">
-          <label className="col-4">
-            Enter your name to add your score to the leaderboard!
-          </label>
-          <input
-            className="col-4"
-            id="name"
-            onChange={this.handleChange}
-          ></input>
-        </div>
+
+        {(this.props.user && <h1>Yo</h1>) || (
+          <React.Fragment>
+            <div className="row justify-content-md-center">
+              <label className="col-4">
+                Enter your name to add your score to the leaderboard!
+              </label>
+              <input
+                className="col-4"
+                id="name"
+                onChange={this.handleChange}
+              ></input>
+            </div>
+          </React.Fragment>
+        )}
+
         <div className="row justify-content-md-center my-auto">
           <button
             type="button"

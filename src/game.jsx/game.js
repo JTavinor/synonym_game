@@ -65,10 +65,17 @@ class Game extends Component {
   };
 
   handlePlayAgain = async (name, points) => {
-    await axios.post("http://localhost:5000/", {
-      name: name || "unknown",
-      score: points,
-    });
+    if (this.props.user) {
+      await axios.post("http://localhost:5000/leaderboard", {
+        userId: this.props.user._id,
+        score: points,
+      });
+    } else if (!this.props.user) {
+      await axios.post("http://localhost:5000/leaderboard", {
+        name: name || "unknown",
+        score: points,
+      });
+    }
 
     const lives = 3;
     const score = 0;
@@ -80,8 +87,12 @@ class Game extends Component {
     if (lives === 0) {
       return (
         <div>
-          <GameOver score={score} handlePlayAgain={this.handlePlayAgain} />{" "}
-          <Leaderboard apiRoute={"http://localhost:5000/"} />
+          <GameOver
+            score={score}
+            handlePlayAgain={this.handlePlayAgain}
+            user={this.props.user}
+          />{" "}
+          <Leaderboard apiRoute={"http://localhost:5000/leaderboard"} />
         </div>
       );
     }
@@ -105,7 +116,7 @@ class Game extends Component {
             handleRulesClick={this.handleRulesTab}
           />
         )}
-        <Leaderboard apiRoute={"http://localhost:5000/"} />
+        <Leaderboard apiRoute={"http://localhost:5000/leaderboard"} />
       </React.Fragment>
     );
   }
