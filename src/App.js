@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
-import Game from "./game.jsx/game";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import Leaderboard from "./game.jsx/leaderboard";
 import NavBar from "./game.jsx/navbar";
 import Login from "./game.jsx/login";
-import jwtDecode from "jwt-decode";
 import axios from "axios";
 import UserPage from "./game.jsx/userPage";
+import LeaderBoardPage from "./game.jsx/leaderboardPage";
+import PersonalPage from "./game.jsx/personalPage";
+import HomePage from "./game.jsx/homePage";
 
 // axios.defaults.headers.common["x-auth-token"] = localStorage.getItem(
 //   "x-auth-token"
@@ -47,7 +47,7 @@ class App extends Component {
               path="/leaderboard"
               exact
               render={(props) => (
-                <Leaderboard
+                <LeaderBoardPage
                   {...props}
                   apiRoute={"http://localhost:5000/leaderboard/fullLeaderboard"}
                 />
@@ -58,10 +58,10 @@ class App extends Component {
               path="/login"
               render={(props) => <Login {...props} user={user} />}
             />
-            <Route path="/userpage" component={UserPage} />
+            <Route path="/userpage" component={PersonalPage} />
             <Route
               path="/"
-              render={(props) => <Game {...props} user={user} />}
+              render={(props) => <HomePage {...props} user={user} />}
             />
           </Switch>
         </BrowserRouter>

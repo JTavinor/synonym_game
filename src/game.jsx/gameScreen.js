@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
-class GameScreen extends Component {
+class Game extends Component {
   renderLives = () => {
     const hearts = [];
     for (let i = 1; i <= this.props.lives; i++) {
@@ -32,7 +32,7 @@ class GameScreen extends Component {
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-left"
               onClick={() => this.props.handleSynonymGameClick()}
             >
-              Synonym Game
+              Word Association Game
             </button>
             <button
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-right"
@@ -72,4 +72,4 @@ class GameScreen extends Component {
   }
 }
 
-export default GameScreen;
+export default Game;

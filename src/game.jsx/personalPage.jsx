@@ -3,7 +3,7 @@ import axios from "axios";
 import Leaderboard from "./leaderboard";
 import Leaderboard2 from "./leaderboard2";
 
-class UserPage extends Component {
+class PersonalPage extends Component {
   state = {};
 
   componentWillMount = async () => {
@@ -40,4 +40,4 @@ class UserPage extends Component {
   }
 }
 
-export default UserPage;
+export default PersonalPage;
