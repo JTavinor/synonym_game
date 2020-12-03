@@ -16,7 +16,7 @@ import HomePage from "./game.jsx/homePage";
 class App extends Component {
   state = {};
 
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     try {
       const jwt = localStorage.getItem("x-auth-token");
       const user = await axios.get("http://localhost:5000/users/me", {
@@ -58,7 +58,13 @@ class App extends Component {
               path="/login"
               render={(props) => <Login {...props} user={user} />}
             />
-            <Route path="/userpage" component={PersonalPage} />
+            {user && (
+              <Route
+                exact
+                path="/userpage"
+                render={(props) => <PersonalPage {...props} user={user} />}
+              />
+            )}
             <Route
               path="/"
               render={(props) => <HomePage {...props} user={user} />}

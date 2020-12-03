@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import getRandomWord from "random-words";
-import Game from "./gameScreen";
+import WordGame from "./wordGame";
 import GameOver from "./gameOver";
 import RulesPage from "./rulesPage";
-import Leaderboard2 from "./leaderboard2";
+import Leaderboard from "../common/leaderboard";
 import {
   getLeaderboard,
   getWordData,
@@ -26,11 +26,6 @@ class HomePage extends Component {
     this.setState({ data });
     this.getNewWord();
   }
-
-  // async componentDidUpdate() {
-  //   const { data } = await getLeaderboard();
-  //   this.setState({ data });
-  // }
 
   async getNewWord() {
     const newWord = getRandomWord();
@@ -91,31 +86,13 @@ class HomePage extends Component {
     this.setState({ lives, score });
   };
 
-  render() {
-    console.log("Y");
+  renderGame = () => {
     const { lives, currentWord, score, userGuess } = this.state;
-    if (lives === 0) {
-      return (
-        <div>
-          <GameOver
-            score={score}
-            handlePlayAgain={this.handlePlayAgain}
-            user={this.props.user}
-          />{" "}
-          <Leaderboard2
-            data={this.state.data}
-            searchbar={false}
-            pagination={false}
-            title={"Top 5 scores"}
-            sortIcon={false}
-          />
-        </div>
-      );
-    }
+
     return (
       <React.Fragment>
-        {this.state.gamePageSelected && (
-          <Game
+        {(this.state.gamePageSelected && (
+          <WordGame
             lives={lives}
             currentWord={currentWord}
             score={score}
@@ -125,24 +102,47 @@ class HomePage extends Component {
             handleSynonymGameClick={this.handleGameTab}
             handleRulesClick={this.handleRulesTab}
           />
-        )}
-        {!this.state.gamePageSelected && (
+        )) || (
           <RulesPage
             handleSynonymGameClick={this.handleGameTab}
             handleRulesClick={this.handleRulesTab}
           />
         )}
+      </React.Fragment>
+    );
+  };
 
+  renderGameOver = () => {
+    const { score } = this.state;
+
+    return (
+      <div>
+        <GameOver
+          score={score}
+          handlePlayAgain={this.handlePlayAgain}
+          userLoggedIn={this.props.user}
+        />
+      </div>
+    );
+  };
+
+  render() {
+    console.log(this.state.synonyms);
+    const { lives, data } = this.state;
+    return (
+      <React.Fragment>
+        {(lives !== 0 && this.renderGame()) || this.renderGameOver()}
         {!this.state.data ? (
           <div></div>
         ) : (
-          <Leaderboard2
-            data={this.state.data}
+          <Leaderboard
+            data={data}
             searchbar={false}
             pagination={false}
             title={"Top 5 scores"}
-            key={this.state.data.length}
-            sortIcon={false}
+            key={data.length}
+            sortable={false}
+            pageLength={5}
           />
         )}
       </React.Fragment>

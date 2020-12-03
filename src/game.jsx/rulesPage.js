@@ -13,7 +13,7 @@ class RulesPage extends Component {
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
               onClick={() => this.props.handleSynonymGameClick()}
             >
-              Synonym Game
+              Word Association Game
             </button>
             <button
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white"
@@ -23,14 +23,24 @@ class RulesPage extends Component {
             </button>
           </div>{" "}
           <div className="row justify-content-md-center pt-5 h-40">
-            <h1 className="text-capitalize display-4">Synonym Game Rules</h1>
+            <h1>Synonym Game Rules</h1>
           </div>
           <div className="row justify-content-md-center align-items-center h-50">
             <ul>
-              <li>You have 3 lives</li>
-              <li>Try and guess as many synonyms as you can!</li>
-              <li>Example...</li>
-              <li>Scoreboard coming soon!</li>
+              <li>
+                You will see a word on the screen, your job is to give a word
+                associated with it.
+              </li>
+              <li>
+                For example words associated with "Temperature" could be:
+                <ul>
+                  <li>Thermometer</li>
+                  <li>Heat</li>
+                  <li>Climate</li>
+                </ul>
+              </li>
+              <li>You have 3 lives, see how you fare on the leaderboard!</li>
+              <li>Good luck!</li>
             </ul>
           </div>
         </div>

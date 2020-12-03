@@ -8,6 +8,10 @@ export function getLeaderboard() {
   return axios.get("http://localhost:5000/leaderboard/fullLeaderboard");
 }
 
+export function getUserLeaderboard(userId) {
+  return axios.get(`http://localhost:5000/leaderboard/${userId}`);
+}
+
 export function getWordData(newWord) {
   return axios.get(`https://api.datamuse.com/words?ml=${newWord}`);
 }
@@ -24,4 +28,27 @@ export function postUserScore(userId, score) {
     userId,
     score,
   });
+}
+
+export async function loginUser(userName, password) {
+  const { data: jwt } = await axios.post("http://localhost:5000/auth", {
+    userName,
+    password,
+  });
+  localStorage.setItem("x-auth-token", jwt);
+  window.location = "/";
+}
+
+export async function registerUser(userName, password) {
+  axios.post("http://localhost:5000/users/", {
+    userName,
+    password,
+  });
+
+  loginUser(userName, password);
+}
+
+export function deleteScore(id) {
+  console.log(id);
+  axios.delete(`http://localhost:5000/leaderboard/${id}`);
 }

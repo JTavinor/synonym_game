@@ -1,25 +1,36 @@
 import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
-class Game extends Component {
+class WordGame extends Component {
   renderLives = () => {
     const hearts = [];
     for (let i = 1; i <= this.props.lives; i++) {
       hearts.push(
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={{ color: "red" }}
-          className="px-1"
+        <i
+          className="fa fa-heart"
+          style={{ color: "red", padding: "0px 2px" }}
           key={i}
-        />
+        ></i>
       );
     }
     return hearts;
   };
 
+  handleEnterPress = (event) => {
+    if (event.code === "Enter") {
+      this.props.handleSubmit();
+    }
+  };
+
   render() {
-    const { currentWord, score, userGuess } = this.props;
+    const {
+      currentWord,
+      score,
+      userGuess,
+      handleRulesClick,
+      handleSynonymGameClick,
+      handleSubmit,
+      handleChange,
+    } = this.props;
 
     return (
       <div className="vh-auto">
@@ -30,13 +41,13 @@ class Game extends Component {
           <div className="row ">
             <button
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-left"
-              onClick={() => this.props.handleSynonymGameClick()}
+              onClick={handleSynonymGameClick}
             >
               Word Association Game
             </button>
             <button
               className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-right"
-              onClick={() => this.props.handleRulesClick()}
+              onClick={handleRulesClick}
             >
               Rules
             </button>
@@ -49,15 +60,15 @@ class Game extends Component {
               type="text"
               className="form-control col-8 mx-1 focus"
               id="synonymGuess"
-              aria-describedby="emailHelp"
               placeholder="Synonym Guess"
               value={userGuess}
-              onChange={(e) => this.props.handleChange(e)}
+              onChange={(e) => handleChange(e)}
+              onKeyPress={this.handleEnterPress}
             ></input>
             <button
               type="button"
               className="btn btn-primary col-2"
-              onClick={() => this.props.handleSubmit()}
+              onClick={handleSubmit}
             >
               Submit
             </button>
@@ -72,4 +83,4 @@ class Game extends Component {
   }
 }
 
-export default Game;
+export default WordGame;

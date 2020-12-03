@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Leaderboard2 from "./leaderboard2";
 import axios from "axios";
+import Leaderboard from "../common/leaderboard";
 
 class LeaderBoardPage extends Component {
   state = {};
@@ -17,12 +17,12 @@ class LeaderBoardPage extends Component {
         {!this.state.data ? (
           <div></div>
         ) : (
-          <Leaderboard2
+          <Leaderboard
             data={this.state.data}
             searchbar={true}
             pagination={true}
             title={"Leaderboard"}
-            sortIcon={true}
+            sortable={true}
           />
         )}
       </div>
