@@ -107,6 +107,7 @@ class HomePage extends Component {
             searchbar={false}
             pagination={false}
             title={"Top 5 scores"}
+            sortIcon={false}
           />
         </div>
       );
@@ -141,6 +142,7 @@ class HomePage extends Component {
             pagination={false}
             title={"Top 5 scores"}
             key={this.state.data.length}
+            sortIcon={false}
           />
         )}
       </React.Fragment>

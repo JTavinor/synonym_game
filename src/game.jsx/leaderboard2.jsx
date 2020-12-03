@@ -17,7 +17,13 @@ class Leaderboard2 extends Component {
 
   constructor(props) {
     super(props);
-    const { data: dataArray, searchbar, pagination, title } = this.props;
+    const {
+      data: dataArray,
+      searchbar,
+      pagination,
+      title,
+      sortIcon,
+    } = this.props;
 
     // Data is ordered on backend, so just need to iterate through data and add a ranking number
     for (let i = 0; i < dataArray.length; i++) {
@@ -33,6 +39,7 @@ class Leaderboard2 extends Component {
       columns: {},
       searchQuery: "",
       currentPage: 1,
+      sortIcon,
     };
   }
 
@@ -50,6 +57,8 @@ class Leaderboard2 extends Component {
   }
 
   handleFilterTable(currentColumn) {
+    if (this.state.sortIcon === false) return;
+
     let { dataArray, columns } = this.state;
     if (!columns[currentColumn]) {
       let filtered = _.orderBy(dataArray, [currentColumn], ["asc"]);
@@ -143,19 +152,19 @@ class Leaderboard2 extends Component {
             <tr>
               <th scope="col" onClick={() => this.handleFilterTable("rank")}>
                 Rank
-                {this.renderSortIcon("rank")}
+                {this.state.sortIcon && this.renderSortIcon("rank")}
               </th>
               <th scope="col" onClick={() => this.handleFilterTable("name")}>
                 Name
-                {this.renderSortIcon("name")}
+                {this.state.sortIcon && this.renderSortIcon("name")}
               </th>
               <th scope="col" onClick={() => this.handleFilterTable("score")}>
                 Score
-                {this.renderSortIcon("score")}
+                {this.state.sortIcon && this.renderSortIcon("score")}
               </th>
               <th scope="col" onClick={() => this.handleFilterTable("date")}>
                 Date
-                {this.renderSortIcon("date")}
+                {this.state.sortIcon && this.renderSortIcon("date")}
               </th>
             </tr>
           </thead>

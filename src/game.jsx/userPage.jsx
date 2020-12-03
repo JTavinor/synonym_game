@@ -30,9 +30,10 @@ class UserPage extends Component {
         ) : (
           <Leaderboard2
             data={this.state.data}
-            searchbar={true}
+            searchbar={false}
             pagination={false}
             title={`${this.state.data[0].name}'s Scores`}
+            sortIcon={true}
           />
         )}
       </div>

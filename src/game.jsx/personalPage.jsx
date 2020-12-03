@@ -33,6 +33,7 @@ class PersonalPage extends Component {
             searchbar={true}
             pagination={false}
             title={`${this.state.data[0].name}'s Scores`}
+            sortIcon={true}
           />
         )}
       </div>
