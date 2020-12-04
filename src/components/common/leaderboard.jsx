@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link, useLocation } from "react-router-dom";
 import _ from "lodash";
-import { deleteScore } from "../services/httpservice";
+import { deleteScore } from "../../services/httpservice";
 
 class Leaderboard extends Component {
   constructor(props) {
@@ -72,9 +72,11 @@ class Leaderboard extends Component {
     const pageSelectButtons = [];
     for (let i = 1; i <= Math.ceil(leaderboardData.length / pageLength); i++) {
       if (Math.ceil(leaderboardData.length / pageLength) === 1) return;
+      let classes = "btn mx-1 btn-";
+      classes += this.state.currentPage === i ? "success" : "primary";
       pageSelectButtons.push(
         <button
-          className="btn btn-primary mx-1"
+          className={classes}
           onClick={() => this.setState({ currentPage: i })}
         >
           {i}
@@ -121,7 +123,6 @@ class Leaderboard extends Component {
       .filter((x) => x.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .slice(pageLength * currentPage - pageLength, pageLength * currentPage);
 
-    console.log(leaderboardData);
     return leaderboardData.map((currentRow) => (
       <tr key={leaderboardData.indexOf(currentRow) + 1}>
         <th scope="col">{currentRow.rank}</th>

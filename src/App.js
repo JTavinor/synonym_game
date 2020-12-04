@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
 import { Route, Switch, BrowserRouter } from "react-router-dom";
-import NavBar from "./game.jsx/navbar";
-import Login from "./game.jsx/login";
+import NavBar from "./components/navbar";
+import Login from "./components/login";
 import axios from "axios";
-import UserPage from "./game.jsx/userPage";
-import LeaderBoardPage from "./game.jsx/leaderboardPage";
-import PersonalPage from "./game.jsx/personalPage";
-import HomePage from "./game.jsx/homePage";
+import UserPage from "./components/userPage";
+import LeaderBoardPage from "./components/leaderboardPage";
+import PersonalPage from "./components/personalPage";
+import HomePage from "./components/homePage";
 
 // axios.defaults.headers.common["x-auth-token"] = localStorage.getItem(
 //   "x-auth-token"

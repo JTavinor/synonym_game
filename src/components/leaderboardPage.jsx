@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Leaderboard from "../common/leaderboard";
+import Leaderboard from "./common/leaderboard";
 
 class LeaderBoardPage extends Component {
   state = {};
@@ -50,14 +50,14 @@ export default LeaderBoardPage;
 //     clearTimeout(x);
 //   }
 
-//   countdown() {
-//     if (this.state.counter > 0) {
-//       return setTimeout(() => {
-//         const counter = this.state.counter - 1;
-//         this.setState({ counter });
-//       }, 1000);
-//     }
+// countdown() {
+//   if (this.state.counter > 0) {
+//     return setTimeout(() => {
+//       const counter = this.state.counter - 1;
+//       this.setState({ counter });
+//     }, 1000);
 //   }
+// }
 
 //   handleClick = () => {
 //     const counter = this.state.counter + 10;

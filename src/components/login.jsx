@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { loginUser, registerUser } from "../services/httpservice";
-import Form from "../common/form";
+import Form from "./common/form";
 
 class Login extends Component {
   state = { loginSelected: true };

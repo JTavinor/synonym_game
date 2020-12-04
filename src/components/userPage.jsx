@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Leaderboard from "../common/leaderboard";
+import Leaderboard from "./common/leaderboard";
 import { getUserLeaderboard } from "../services/httpservice";
 
-class PersonalPage extends Component {
+class UserPage extends Component {
   state = {};
 
   componentDidMount = async () => {
-    console.log(this.props);
-    const { data: userScores } = await getUserLeaderboard(this.props.user._id);
+    const { data: userScores } = await getUserLeaderboard(
+      this.props.match.params.id
+    );
 
     this.setState({ userScores });
   };
@@ -26,7 +27,6 @@ class PersonalPage extends Component {
             pagination={true}
             title={`${userScores[0].name}'s Scores`}
             sortable={true}
-            deleteButton={true}
           />
         )}
       </div>
@@ -34,4 +34,4 @@ class PersonalPage extends Component {
   }
 }
 
-export default PersonalPage;
+export default UserPage;
