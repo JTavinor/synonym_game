@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 class GameOver extends Component {
   state = { name: "" };
@@ -49,38 +48,37 @@ class GameOver extends Component {
   };
 
   renderScoreMessage = () => {
-    console.log("score message");
     const { data } = this.props;
-    const leaderboardLength = data.length;
+    const thirdOfLeaderboardLength = data.length / 3;
     const rank = data.findIndex(
       (element) => element.score === this.props.score
     );
-    if (rank <= leaderboardLength / 3) {
+    if (rank <= thirdOfLeaderboardLength) {
       return (
         <h3>
-          You're a genius! You ranked {rank + 1} out of {leaderboardLength}
+          You're a genius! You ranked {rank + 1} out of{" "}
+          {thirdOfLeaderboardLength}
         </h3>
       );
     }
-    if (leaderboardLength / 3 < rank <= (leaderboardLength * 2) / 3) {
+    if (thirdOfLeaderboardLength < rank <= thirdOfLeaderboardLength * 2) {
       return (
         <h3>
-          Not bad! You ranked {rank + 1} out of {leaderboardLength}
+          Not bad! You ranked {rank + 1} out of {thirdOfLeaderboardLength}
         </h3>
       );
     }
-    if ((leaderboardLength * 2) / 3 < rank <= leaderboardLength) {
+    if (thirdOfLeaderboardLength * 2 < rank <= thirdOfLeaderboardLength * 3) {
       return (
         <h3>
-          Dummy! You ranked {rank + 1} out of {leaderboardLength}
+          Dummy! You ranked {rank + 1} out of {thirdOfLeaderboardLength}
         </h3>
       );
     }
   };
 
   render() {
-    console.log(this.props.data);
-    const { score, name, userLoggedIn } = this.props;
+    const { score, userLoggedIn } = this.props;
     return (
       <React.Fragment>
         <div className="row justify-content-md-center mt-auto">

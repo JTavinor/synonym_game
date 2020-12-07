@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import getRandomWord from "random-words";
 
 import {
+  addWrongWord,
   getLeaderboard,
   getWordData,
   postAnonScore,
@@ -74,6 +75,15 @@ class GameContainer extends Component {
     } else {
       lives -= 1;
       this.setState({ lives, userGuess: "" });
+
+      if (this.props.user) {
+        const wrongWord = {};
+        wrongWord.word = this.state.currentWord;
+        const filtered = synonyms.filter((synonym) => synonym.indexOf(" ") < 0);
+        wrongWord.synonyms = filtered.slice(0, 3);
+        console.log(wrongWord.synonyms);
+        addWrongWord(wrongWord, this.props.user._id);
+      }
     }
 
     if (lives === 0) {
@@ -112,6 +122,8 @@ class GameContainer extends Component {
     const { data } = await getLeaderboard();
     this.setState({ data });
 
+    this.getNewWord();
+
     this.setState({ lives, score, gameOver: false, timer });
   };
 
@@ -147,7 +159,7 @@ class GameContainer extends Component {
             <GameOver
               score={this.state.score}
               handlePlayAgain={this.handlePlayAgain}
-              userLoggedIn={this.props.userLoggedIn}
+              userLoggedIn={this.props.user}
               data={this.props.data}
             />
           )}

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
-import { loginUser } from "../../services/httpservice";
 
 class Form extends Component {
   state = { userData: {}, errors: {} };

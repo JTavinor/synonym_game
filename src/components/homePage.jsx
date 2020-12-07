@@ -15,7 +15,7 @@ class HomePage extends Component {
     const { data } = this.state;
     return (
       <React.Fragment>
-        <GameContainer data={data} />
+        <GameContainer data={data} user={this.props.user} />
         {!data ? (
           <div></div>
         ) : (

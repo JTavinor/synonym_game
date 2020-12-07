@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import NavBar from "./components/navbar";
 import Login from "./components/login";
 import axios from "axios";
@@ -29,7 +29,6 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    console.log("Logging out...");
     const user = null;
     this.setState({ user });
     localStorage.clear();
@@ -42,6 +41,9 @@ class App extends Component {
         <NavBar handleLogout={this.handleLogout} user={user} />
         <BrowserRouter>
           <Switch>
+            {user && (
+              <Redirect from={`/users/${user._id}`} exact to="/userpage" />
+            )}
             <Route path="/users/:id" component={UserPage} />
             <Route
               path="/leaderboard"

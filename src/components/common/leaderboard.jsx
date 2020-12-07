@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import _ from "lodash";
 import { deleteScore } from "../../services/httpservice";
 
@@ -18,7 +18,7 @@ class Leaderboard extends Component {
     // Data is ordered on backend, so just need to iterate through data and add a ranking number
     for (let i = 0; i < leaderboardData.length; i++) {
       leaderboardData[i].rank = i + 1;
-      leaderboardData[i].date = leaderboardData[i].date.slice(0, 10);
+      // leaderboardData[i].date = leaderboardData[i].date.slice(0, 10);
     }
 
     let pageLength = 0;
@@ -112,6 +112,7 @@ class Leaderboard extends Component {
           scope="col"
           style={{ width: width[header] }}
           onClick={() => this.handleSortColumns(header)}
+          key={header}
         >
           {_.capitalize(header)}
           {this.state.sortable && this.renderSortIcon(header)}
@@ -119,18 +120,16 @@ class Leaderboard extends Component {
       );
     });
     if (this.state.deleteButton)
-      tableHeader.push(<th scope="col">Delete Score</th>);
+      tableHeader.push(
+        <th scope="col" key="delete">
+          Delete Score
+        </th>
+      );
     return tableHeader;
   }
 
   renderTable() {
-    let {
-      leaderboardData,
-      searchQuery,
-      currentPage,
-      pageLength,
-      path,
-    } = this.state;
+    let { leaderboardData, searchQuery, currentPage, pageLength } = this.state;
 
     leaderboardData = leaderboardData
       .filter((x) => x.name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -138,9 +137,11 @@ class Leaderboard extends Component {
 
     return leaderboardData.map((currentRow) => (
       <tr key={leaderboardData.indexOf(currentRow) + 1}>
-        <th scope="col">{currentRow.rank}</th>
+        <th scope="col" key={"rank" + currentRow._id}>
+          {currentRow.rank}
+        </th>
 
-        <th scope="col">
+        <td key={currentRow.name + currentRow._id}>
           {/* If player is a registered user, link to their stats page */}
           {(currentRow.user._id &&
             window.location.pathname !== `/users/${currentRow.user._id}` &&
@@ -150,14 +151,14 @@ class Leaderboard extends Component {
               </Link>
             )) ||
             currentRow.name}
-        </th>
-        <th scope="col">{currentRow.score}</th>
-        <th scope="col">{currentRow.date}</th>
+        </td>
+        <td key={currentRow.score + currentRow._id}>{currentRow.score}</td>
+        <td key={currentRow.date + currentRow._id}>{currentRow.date}</td>
         {this.state.deleteButton && (
-          <th scope="col">
+          <td key={"button" + currentRow._id}>
             <button
               type="button"
-              class="btn btn-danger btn-sm"
+              className="btn btn-danger btn-sm"
               onClick={() => {
                 deleteScore(currentRow._id);
                 window.location.reload();
@@ -165,7 +166,7 @@ class Leaderboard extends Component {
             >
               Delete
             </button>
-          </th>
+          </td>
         )}
       </tr>
     ));
@@ -190,7 +191,7 @@ class Leaderboard extends Component {
         )}
         <table className="table table-striped m-auto">
           <thead>
-            {this.renderTableHeader(["rank", "name", "score", "date"])}
+            <tr>{this.renderTableHeader(["rank", "name", "score", "date"])}</tr>
           </thead>
           <tbody>{this.renderTable()}</tbody>
         </table>

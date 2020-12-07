@@ -41,12 +41,30 @@ export async function loginUser(userName, password) {
 }
 
 export async function registerUser(userName, password) {
-  const { data } = await axios.post("http://localhost:5000/users/", {
+  await axios.post("http://localhost:5000/users/", {
     userName,
     password,
   });
 
   loginUser(userName, password);
+}
+
+export function addWrongWord(wrongWord, userId) {
+  axios.put("http://localhost:5000/users/", {
+    wrongWord,
+    userId,
+  });
+}
+
+export function deleteWrongWord(wrongWord, userId) {
+  axios.put("http://localhost:5000/users/deleteWord", {
+    wrongWord,
+    userId,
+  });
+}
+
+export function getWrongWords(userId) {
+  return axios.get(`http://localhost:5000/users/wrongWords/${userId}`);
 }
 
 export function deleteScore(id) {
