@@ -75,9 +75,12 @@ class GameScreen extends Component {
         <div className="row justify-content-between mt-auto p-3">
           <h4 className="col-4">Lives: {this.renderLives()}</h4>
           <h4 className="col-4 align-content-center">
-            Time: {this.formatTime()}
+            Time Remaining: {this.formatTime()}
           </h4>
-          <h4 className="col-2">Score: {this.props.score}</h4>
+          <h4 className="col-2"></h4>
+          <h4 className="col-2 align-content-right">
+            Score: {this.props.score}
+          </h4>
         </div>
       </React.Fragment>
     );

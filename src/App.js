@@ -71,6 +71,16 @@ class App extends Component {
             />
           </Switch>
         </BrowserRouter>
+        <footer
+          style={{
+            width: "100%",
+            textAlign: "center",
+            backgroundColor: "lightgray",
+            marginTop: "35px",
+          }}
+        >
+          A Joe Tavinor Production
+        </footer>{" "}
       </React.Fragment>
     );
   }

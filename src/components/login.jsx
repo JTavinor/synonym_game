@@ -1,9 +1,20 @@
 import React, { Component } from "react";
 import { loginUser, registerUser } from "../services/httpservice";
 import Form from "./common/form";
+import Joi from "joi-browser";
 
 class Login extends Component {
-  state = { loginSelected: true };
+  state = { loginSelected: true, errors: "" };
+
+  loginSchema = {
+    userName: Joi.string().required().label("Username"),
+    password: Joi.string().required().label("Password"),
+  };
+
+  registerSchema = {
+    userName: Joi.string().min(3).max(20).required().label("Username"),
+    password: Joi.string().min(5).required().label("Password"),
+  };
 
   handleLoginTab = () => {
     const loginSelected = true;
@@ -35,18 +46,42 @@ class Login extends Component {
             Register
           </button>
         </div>
+        {!this.state.loginSelected && (
+          <React.Fragment>
+            <h1 className="row justify-content-center mt-4">Why Register?</h1>
+            <div className="row justify-content-center my-3">
+              <div class="col-xs-12 center-block align">
+                <ul className="list ">
+                  <li className="item">Look back through wrong answers</li>
+                  <li className="item">Allows you to delete your scores</li>
+                  <li className="item">Personalised Stats!</li>
+                </ul>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
 
         {(this.state.loginSelected && (
           <Form
             title={"Login"}
+            errors={this.state.errors}
             onChange={this.handleFormChange}
-            onClick={(userName, password) => loginUser(userName, password)}
+            onClick={(userName, password) =>
+              this.handleLoginSubmit(userName, password)
+            }
+            schema={this.loginSchema}
+            submit={loginUser}
           ></Form>
         )) || (
           <Form
             title={"Register"}
+            errors={this.state.errors}
             onChange={this.handleFormChange}
-            onClick={(userName, password) => registerUser(userName, password)}
+            onClick={(userName, password) =>
+              this.handleRegisterSubmit(userName, password)
+            }
+            schema={this.registerSchema}
+            submit={registerUser}
           ></Form>
         )}
       </div>

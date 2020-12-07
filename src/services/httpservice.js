@@ -35,12 +35,13 @@ export async function loginUser(userName, password) {
     userName,
     password,
   });
+
   localStorage.setItem("x-auth-token", jwt);
   window.location = "/";
 }
 
 export async function registerUser(userName, password) {
-  axios.post("http://localhost:5000/users/", {
+  const { data } = await axios.post("http://localhost:5000/users/", {
     userName,
     password,
   });

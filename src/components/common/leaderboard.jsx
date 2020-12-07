@@ -31,7 +31,8 @@ class Leaderboard extends Component {
       searchbar,
       pagination,
       title,
-      columns: {},
+      columns: { rank: true },
+      currentColumn: "rank",
       searchQuery: "",
       currentPage: 1,
       sortable,
@@ -39,6 +40,10 @@ class Leaderboard extends Component {
       deleteButton,
     };
   }
+
+  componentDidMount = () => {
+    this.renderSortIcon("rank");
+  };
 
   handleSearchQuery = (e) => {
     const searchQuery = e.currentTarget.value;
@@ -77,7 +82,10 @@ class Leaderboard extends Component {
       pageSelectButtons.push(
         <button
           className={classes}
-          onClick={() => this.setState({ currentPage: i })}
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({ currentPage: i });
+          }}
         >
           {i}
         </button>
@@ -97,9 +105,14 @@ class Leaderboard extends Component {
 
   renderTableHeader(headers) {
     const tableHeader = [];
+    const width = { rank: "15%", name: "20%", score: "15%", date: "20%" };
     headers.forEach((header) => {
       tableHeader.push(
-        <th scope="col" onClick={() => this.handleSortColumns(header)}>
+        <th
+          scope="col"
+          style={{ width: width[header] }}
+          onClick={() => this.handleSortColumns(header)}
+        >
           {_.capitalize(header)}
           {this.state.sortable && this.renderSortIcon(header)}
         </th>
@@ -130,9 +143,8 @@ class Leaderboard extends Component {
         <th scope="col">
           {/* If player is a registered user, link to their stats page */}
           {(currentRow.user._id &&
-            window.location.pathname !== `/users/${currentRow.user._id}` && (
-              // path !==
-              //   `/users/${currentRow.user._id}`
+            window.location.pathname !== `/users/${currentRow.user._id}` &&
+            window.location.pathname !== `/userpage` && (
               <Link to={`/users/${currentRow.user._id}`}>
                 {currentRow.name}
               </Link>
@@ -145,7 +157,7 @@ class Leaderboard extends Component {
           <th scope="col">
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-danger btn-sm"
               onClick={() => {
                 deleteScore(currentRow._id);
                 window.location.reload();
@@ -174,7 +186,6 @@ class Leaderboard extends Component {
             aria-describedby="emailHelp"
             placeholder="Search Leaderboard..."
             onChange={(e) => this.handleSearchQuery(e)}
-            onSelect={() => this.setState({ currentColumn: "" })}
           ></input>
         )}
         <table className="table table-striped m-auto">
