@@ -7,7 +7,13 @@ import {
 } from "../services/httpservice";
 
 class PersonalPage extends Component {
-  state = { wrongWords: [], pageLength: 7, currentPage: 1, searchQuery: "" };
+  state = {
+    wrongWords: [],
+    pageLength: 7,
+    currentPage: 1,
+    searchQuery: "",
+    pageRange: [1, 5],
+  };
 
   componentDidMount = async () => {
     const { data: userScores } = await getUserLeaderboard(this.props.user._id);
@@ -22,8 +28,6 @@ class PersonalPage extends Component {
     wrongWords = wrongWords
       .filter((x) => x.word.toLowerCase().includes(searchQuery.toLowerCase()))
       .slice(pageLength * currentPage - pageLength, pageLength * currentPage);
-
-    console.log(wrongWords);
 
     return wrongWords.map((element) => (
       <tr>
@@ -51,23 +55,52 @@ class PersonalPage extends Component {
 
   handleSearchQuery = (e) => {
     const searchQuery = e.currentTarget.value;
-    this.setState({ searchQuery, currentPage: 1 });
+    this.setState({ searchQuery, currentPage: 1, pageRange: [1, 5] });
   };
 
   renderPaginationButtons() {
-    let { wrongWords, pageLength } = this.state;
+    let { wrongWords, searchQuery, pageLength } = this.state;
 
-    //ADD WITH SEARCHBAR
-    // wrongWords = wrongWords.filter(
-    //   (row) => row.wrongWord.toLowerCase()
-    //   // .includes(searchQuery.toLowerCase())
-    // );
+    wrongWords = wrongWords.filter((x) =>
+      x.word.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const pageSelectButtons = [];
-    for (let i = 1; i <= Math.ceil(wrongWords.length / pageLength); i++) {
+    // for (let i = 1; i <= Math.ceil(wrongWords.length / pageLength); i++)
+    const { pageRange } = this.state;
+
+    if (pageRange[1] >= 6 && this.state.currentPage > 1) {
+      pageSelectButtons.push(
+        <button
+          className="btn mx-1 btn-info"
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({ currentPage: this.state.currentPage - 1 });
+            pageRange[0] -= 1;
+            pageRange[1] -= 1;
+            this.setState({ pageRange });
+          }}
+        >
+          {"<<"}
+        </button>
+      );
+    }
+
+    if (Math.ceil(wrongWords.length / pageLength) < pageRange[1]) {
+      var topButtonNumber = Math.ceil(wrongWords.length / pageLength);
+    } else {
+      var topButtonNumber = pageRange[1];
+    }
+    for (
+      let i = pageRange[0];
+      // i <= Math.ceil(wrongWords.length / pageLength);
+      i <= topButtonNumber;
+      i++
+    ) {
       if (Math.ceil(wrongWords.length / pageLength) === 1) return;
       let classes = "btn mx-1 btn-";
       classes += this.state.currentPage === i ? "success" : "primary";
+
       pageSelectButtons.push(
         <button
           className={classes}
@@ -80,6 +113,27 @@ class PersonalPage extends Component {
         </button>
       );
     }
+
+    if (
+      pageRange[1] < Math.ceil(wrongWords.length / pageLength) &&
+      this.state.currentPage < Math.ceil(wrongWords.length / pageLength)
+    ) {
+      pageSelectButtons.push(
+        <button
+          className="btn mx-1 btn-info"
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({ currentPage: this.state.currentPage + 1 });
+            pageRange[0] += 1;
+            pageRange[1] += 1;
+            this.setState({ pageRange });
+          }}
+        >
+          {">>"}
+        </button>
+      );
+    }
+
     return pageSelectButtons;
   }
 
@@ -103,7 +157,9 @@ class PersonalPage extends Component {
           className="container col-sm- mt-5 mb-2 bg-light d-flex py-3 flex-column mx-auto"
           style={{ height: "auto" }}
         >
-          <h1>Wrong Words - 3 Correct Examples</h1>
+          <h1 className="row justify-content-center">
+            Wrong Words - 3 Correct Examples
+          </h1>
           <input
             type="text"
             className="form-control col-align-self-center col-8 mx-auto my-2"
@@ -112,19 +168,24 @@ class PersonalPage extends Component {
             placeholder="Search Leaderboard..."
             onChange={(e) => this.handleSearchQuery(e)}
           ></input>
-          <table class="table">
+          <table class="table table-striped m-auto">
             <thead>
               <tr>
                 <th scope="col">Wrong Word</th>
                 <th scope="col">First</th>
                 <th scope="col">Last</th>
                 <th scope="col">Handle</th>
+                <th scope="col" key="delete">
+                  Delete Score
+                </th>
               </tr>
             </thead>
             <tbody>{this.renderTableBody()}</tbody>
           </table>
+          <ul className="list-group list-group-horizontal mt-2 row justify-content-center">
+            {this.renderPaginationButtons()}
+          </ul>
         </div>
-        {this.renderPaginationButtons()}
       </div>
     );
   }

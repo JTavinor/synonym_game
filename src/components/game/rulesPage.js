@@ -4,17 +4,19 @@ class RulesPage extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="row justify-content-md-center pt-5 h-40">
-          <h1>Synonym Game Rules</h1>
+        <div className="row justify-content-center pt-md-5 pt-sm-4 pt-xs-3 pb-2 h-40">
+          <h1>
+            <u>Rules of the game</u>
+          </h1>
         </div>
         <div className="row justify-content-md-center align-items-center h-50">
           <ul>
             <li>
-              You will see a word on the screen, your job is to give a word
-              associated with it.
+              For each word that appears on the screen, you need to give a word
+              associated with it
             </li>
             <li>
-              For example words associated with "Temperature" could be:
+              For example, words associated with "Temperature" could be:
               <ul>
                 <li>Thermometer</li>
                 <li>Heat</li>
@@ -22,8 +24,8 @@ class RulesPage extends Component {
               </ul>
             </li>
             <li>
-              Once you start the game you have 90 seconds to score as high as
-              you can!
+              Once the game starts you have 90 seconds to score as high as you
+              can!
             </li>
             <li>
               But don't just pass on tough words, as you only have three lives!

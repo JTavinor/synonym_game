@@ -68,6 +68,5 @@ export function getWrongWords(userId) {
 }
 
 export function deleteScore(id) {
-  console.log(id);
   axios.delete(`http://localhost:5000/leaderboard/${id}`);
 }

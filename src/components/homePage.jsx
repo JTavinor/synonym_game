@@ -6,21 +6,37 @@ import { getLeaderboard } from "../services/httpservice";
 class HomePage extends Component {
   state = {};
 
-  async componentDidMount() {
+  componentDidMount = () => {
+    this._isMounted = true;
+    this.getLeaderboardData();
+  };
+
+  getLeaderboardData = async () => {
     const { data } = await getLeaderboard();
     this.setState({ data });
-  }
+  };
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+    this.setState = (state, callback) => {
+      return;
+    };
+  };
 
   render() {
     const { data } = this.state;
     return (
       <React.Fragment>
-        <GameContainer data={data} user={this.props.user} />
+        <GameContainer
+          data={data}
+          user={this.props.user}
+          refreshLeaderboard={this.getLeaderboardData}
+        />
         {!data ? (
           <div></div>
         ) : (
           <Leaderboard
-            data={data}
+            data={this.state.data}
             searchbar={false}
             pagination={false}
             title={"Top 5 scores"}

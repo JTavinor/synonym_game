@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { loginUser, registerUser } from "../services/httpservice";
 import Form from "./common/form";
 import Joi from "joi-browser";
+import RegisterForm from "./registerPage";
 
 class Login extends Component {
   state = { loginSelected: true, errors: "" };
@@ -14,6 +15,11 @@ class Login extends Component {
   registerSchema = {
     userName: Joi.string().min(3).max(20).required().label("Username"),
     password: Joi.string().min(5).required().label("Password"),
+    password_confirmation: Joi.string()
+      .equal(Joi.ref("password"))
+      .required()
+      .options({ language: { any: { allowOnly: "must match password" } } })
+      .label("Password confirmation"),
   };
 
   handleLoginTab = () => {
@@ -46,7 +52,7 @@ class Login extends Component {
             Register
           </button>
         </div>
-        {!this.state.loginSelected && (
+        {/* {!this.state.loginSelected && (
           <React.Fragment>
             <h1 className="row justify-content-center mt-4">Why Register?</h1>
             <div className="row justify-content-center my-3">
@@ -59,7 +65,7 @@ class Login extends Component {
               </div>
             </div>
           </React.Fragment>
-        )}
+        )} */}
 
         {(this.state.loginSelected && (
           <Form
@@ -73,16 +79,17 @@ class Login extends Component {
             submit={loginUser}
           ></Form>
         )) || (
-          <Form
-            title={"Register"}
-            errors={this.state.errors}
-            onChange={this.handleFormChange}
-            onClick={(userName, password) =>
-              this.handleRegisterSubmit(userName, password)
-            }
-            schema={this.registerSchema}
-            submit={registerUser}
-          ></Form>
+          // <Form
+          //   title={"Register"}
+          //   errors={this.state.errors}
+          //   onChange={this.handleFormChange}
+          //   onClick={(userName, password) =>
+          //     this.handleRegisterSubmit(userName, password)
+          //   }
+          //   schema={this.registerSchema}
+          //   submit={registerUser}
+          // ></Form>
+          <RegisterForm />
         )}
       </div>
     );

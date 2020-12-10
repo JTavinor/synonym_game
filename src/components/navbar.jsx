@@ -2,8 +2,9 @@ import React, { Component } from "react";
 
 class NavBar extends Component {
   render() {
+    const { user } = this.props;
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <a className="navbar-brand" href="/">
           Word Association Game
         </a>
@@ -26,11 +27,11 @@ class NavBar extends Component {
               </a>
             </li>
 
-            {(this.props.user && (
+            {user && (
               <React.Fragment>
                 <li className="nav-item">
                   <a className="nav-link" href="/userpage">
-                    {this.props.user.userName}
+                    {user.userName}
                   </a>
                 </li>
                 <li className="nav-item">
@@ -43,7 +44,8 @@ class NavBar extends Component {
                   </a>
                 </li>
               </React.Fragment>
-            )) || (
+            )}
+            {!user && (
               <li className="nav-item">
                 <a className="nav-link" href="/login">
                   Login / Register

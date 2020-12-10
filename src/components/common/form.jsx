@@ -37,7 +37,9 @@ class Form extends Component {
   handleFormChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    if (errorMessage) errors[input.name] = errorMessage;
+    //Cannot get Joi validation for password confirmation working onChange
+    if (this.state.userData.password === input.value) delete errors[input.name];
+    else if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
 
     const userData = { ...this.state.userData };
@@ -103,6 +105,26 @@ class Form extends Component {
             <div className="alert alert-danger">{errors.password}</div>
           )}
         </div>
+
+        {this.props.title === "Register" && (
+          <div className="form-group col-8 justify-content-center m-auto py-3">
+            <label htmlFor="exampleInputPassword1"> Re-Enter Password</label>
+            <input
+              name="password_confirmation"
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+              placeholder="Re-Enter Password"
+              onChange={this.handleFormChange}
+              onKeyPress={this.handleEnterPress}
+            />
+            {errors.password_confirmation && (
+              <div className="alert alert-danger">
+                {errors.password_confirmation}
+              </div>
+            )}
+          </div>
+        )}
 
         <button
           className="btn btn-primary mb-4  my-2 mx-auto col-4 p-auto"

@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import Leaderboard from "./common/leaderboard";
 import { getUserLeaderboard } from "../services/httpservice";
 
+// When you click on a different users page, it will show your a leaderboard of their scores
 class UserPage extends Component {
   state = {};
 
   componentDidMount = async () => {
+    // Gets a specific users scores
     const { data: userScores } = await getUserLeaderboard(
       this.props.match.params.id
     );

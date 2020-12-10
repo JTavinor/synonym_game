@@ -21,10 +21,10 @@ class Leaderboard extends Component {
       // leaderboardData[i].date = leaderboardData[i].date.slice(0, 10);
     }
 
-    let pageLength = 0;
-    if (leaderboardData.length <= 25) {
-      pageLength = 5;
-    } else pageLength = leaderboardData.length / 5;
+    // let pageLength = 0;
+    // if (leaderboardData.length <= 25) {
+    //   pageLength = 5;
+    // } else pageLength = Math.ceil(leaderboardData.length / 5);
 
     this.state = {
       leaderboardData,
@@ -36,8 +36,9 @@ class Leaderboard extends Component {
       searchQuery: "",
       currentPage: 1,
       sortable,
-      pageLength: this.props.pageLength || pageLength,
+      pageLength: this.props.pageLength || 10,
       deleteButton,
+      pageRange: [1, 5],
     };
   }
 
@@ -75,12 +76,45 @@ class Leaderboard extends Component {
     );
 
     const pageSelectButtons = [];
-    for (let i = 1; i <= Math.ceil(leaderboardData.length / pageLength); i++) {
+    // for (let i = 1; i <= Math.ceil(leaderboardData.length / pageLength); i++)
+    const { pageRange } = this.state;
+
+    if (pageRange[1] >= 6 && this.state.currentPage > 1) {
+      pageSelectButtons.push(
+        <button
+          className="btn mx-1 btn-info"
+          key="Fwd"
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({ currentPage: this.state.currentPage - 1 });
+            pageRange[0] -= 1;
+            pageRange[1] -= 1;
+            this.setState({ pageRange });
+          }}
+        >
+          {"<<"}
+        </button>
+      );
+    }
+
+    if (Math.ceil(leaderboardData.length / pageLength) < pageRange[1]) {
+      var topButtonNumber = Math.ceil(leaderboardData.length / pageLength);
+    } else {
+      topButtonNumber = pageRange[1];
+    }
+    for (
+      let i = pageRange[0];
+      // i <= Math.ceil(leaderboardData.length / pageLength);
+      i <= topButtonNumber;
+      i++
+    ) {
       if (Math.ceil(leaderboardData.length / pageLength) === 1) return;
       let classes = "btn mx-1 btn-";
       classes += this.state.currentPage === i ? "success" : "primary";
+
       pageSelectButtons.push(
         <button
+          key={i}
           className={classes}
           onClick={(e) => {
             e.preventDefault();
@@ -91,6 +125,28 @@ class Leaderboard extends Component {
         </button>
       );
     }
+
+    if (
+      pageRange[1] < Math.ceil(leaderboardData.length / pageLength) &&
+      this.state.currentPage < Math.ceil(leaderboardData.length / pageLength)
+    ) {
+      pageSelectButtons.push(
+        <button
+          className="btn mx-1 btn-info"
+          key="back"
+          onClick={(e) => {
+            e.preventDefault();
+            this.setState({ currentPage: this.state.currentPage + 1 });
+            pageRange[0] += 1;
+            pageRange[1] += 1;
+            this.setState({ pageRange });
+          }}
+        >
+          {">>"}
+        </button>
+      );
+    }
+
     return pageSelectButtons;
   }
 
@@ -128,7 +184,7 @@ class Leaderboard extends Component {
     return tableHeader;
   }
 
-  renderTable() {
+  renderTable = () => {
     let { leaderboardData, searchQuery, currentPage, pageLength } = this.state;
 
     leaderboardData = leaderboardData
@@ -161,6 +217,7 @@ class Leaderboard extends Component {
               className="btn btn-danger btn-sm"
               onClick={() => {
                 deleteScore(currentRow._id);
+                this.props.refreshLeaderboard();
                 window.location.reload();
               }}
             >
@@ -170,7 +227,7 @@ class Leaderboard extends Component {
         )}
       </tr>
     ));
-  }
+  };
 
   render() {
     return (
@@ -196,7 +253,7 @@ class Leaderboard extends Component {
           <tbody>{this.renderTable()}</tbody>
         </table>
         {this.state.pagination && (
-          <ul className="list-group list-group-horizontal mt-2 row justify-content-md-center">
+          <ul className="list-group list-group-horizontal mt-2 row justify-content-center">
             {this.renderPaginationButtons()}
           </ul>
         )}

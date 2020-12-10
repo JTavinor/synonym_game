@@ -23,7 +23,7 @@ class GameOver extends Component {
 
   renderLoggedInGameOver = () => {
     return (
-      <p className="row justify-content-md-center">
+      <p className="row justify-content-center">
         Press the button to upload your score and play again!
       </p>
     );
@@ -32,10 +32,10 @@ class GameOver extends Component {
   renderAnonGameOver = () => {
     return (
       <React.Fragment>
-        <label className="row justify-content-md-center">
+        <label className="row justify-content-center">
           Enter your name to add your score to the leaderboard!
         </label>
-        <div className="row justify-content-md-center">
+        <div className="row justify-content-center">
           <input
             className="col-6 "
             id="name"
@@ -55,24 +55,24 @@ class GameOver extends Component {
     );
     if (rank <= thirdOfLeaderboardLength) {
       return (
-        <h3>
+        <React.Fragment>
           You're a genius! You ranked {rank + 1} out of{" "}
-          {thirdOfLeaderboardLength}
-        </h3>
+          {thirdOfLeaderboardLength * 3}
+        </React.Fragment>
       );
     }
     if (thirdOfLeaderboardLength < rank <= thirdOfLeaderboardLength * 2) {
       return (
-        <h3>
-          Not bad! You ranked {rank + 1} out of {thirdOfLeaderboardLength}
-        </h3>
+        <React.Fragment>
+          Not bad! You ranked {rank + 1} out of {thirdOfLeaderboardLength * 3}
+        </React.Fragment>
       );
     }
     if (thirdOfLeaderboardLength * 2 < rank <= thirdOfLeaderboardLength * 3) {
       return (
-        <h3>
-          Dummy! You ranked {rank + 1} out of {thirdOfLeaderboardLength}
-        </h3>
+        <React.Fragment>
+          Dummy! You ranked {rank + 1} out of {thirdOfLeaderboardLength * 3}
+        </React.Fragment>
       );
     }
   };
@@ -81,16 +81,16 @@ class GameOver extends Component {
     const { score, userLoggedIn } = this.props;
     return (
       <React.Fragment>
-        <div className="row justify-content-md-center mt-auto">
-          <h2 className="text-capitalize display-4">Game Over</h2>
-        </div>
+        <h2 className="row justify-content-center text-capitalize display-4 mt-4">
+          Game Over
+        </h2>
         {/* <div className="row justify-content-md-center mt-auto"> */}
-        <h3 className="py-4 row justify-content-md-center m-auto py-0">
+        <h2 className="row justify-content-center my-4">
           You scored {score} points
-        </h3>
-        <h3 className="py-4 row justify-content-md-center m-auto py-0">
+        </h2>
+        <h4 className="row justify-content-center">
           {this.renderScoreMessage()}
-        </h3>
+        </h4>
         {/* </div> */}
 
         {(userLoggedIn && this.renderLoggedInGameOver()) ||
@@ -99,7 +99,7 @@ class GameOver extends Component {
         <div className="row justify-content-center my-auto">
           <button
             type="button"
-            className="btn btn-primary col-3 mx-1"
+            className="btn btn-primary col-md-3 col-5 mx-1"
             onClick={() =>
               this.props.handlePlayAgain(this.state.name, score, true)
             }
@@ -108,7 +108,7 @@ class GameOver extends Component {
           </button>
           <button
             type="button"
-            className="btn btn-primary col-3  mx-1"
+            className="btn btn-primary col-md-3 col-5 mx-1"
             onClick={() =>
               this.props.handlePlayAgain(this.state.name, score, false)
             }

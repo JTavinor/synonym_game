@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Leaderboard from "./common/leaderboard";
+import { getLeaderboard } from "../services/httpservice";
 
 class LeaderBoardPage extends Component {
   state = {};
-  async componentDidMount() {
-    const { data } = await axios.get(
-      "http://localhost:5000/leaderboard/fullLeaderboard"
-    );
+
+  componentDidMount = () => {
+    this.getLeaderboardData();
+  };
+
+  getLeaderboardData = async () => {
+    // console.log("X");
+    const { data } = await getLeaderboard();
     this.setState({ data });
-  }
+  };
 
   render() {
     return (
@@ -23,6 +28,8 @@ class LeaderBoardPage extends Component {
             pagination={true}
             title={"Leaderboard"}
             sortable={true}
+            deleteButton={false}
+            refreshLeaderboard={this.getLeaderboardData}
           />
         )}
       </div>

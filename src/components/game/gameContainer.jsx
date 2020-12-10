@@ -26,9 +26,10 @@ class GameContainer extends Component {
     gameStarted: false,
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
+    this._isMounted = true;
     this.getNewWord();
-  }
+  };
 
   async getNewWord() {
     const newWord = getRandomWord();
@@ -39,6 +40,13 @@ class GameContainer extends Component {
 
     this.setState({ currentWord: newWord, synonyms });
   }
+
+  componentWillUnmount = () => {
+    this._isMounted = false;
+    this.setState = (state, callback) => {
+      return;
+    };
+  };
 
   handleGameTab = () => {
     const gamePageSelected = true;
@@ -121,6 +129,8 @@ class GameContainer extends Component {
 
     const { data } = await getLeaderboard();
     this.setState({ data });
+
+    this.props.refreshLeaderboard();
 
     this.getNewWord();
 
