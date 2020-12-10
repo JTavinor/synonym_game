@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import getRandomWord from "random-words";
-
 import {
-  addWrongWord,
+  addWrongWordToDb,
   getLeaderboard,
   getWordData,
   postAnonScore,
   postUserScore,
 } from "../../services/httpservice";
 import GameScreen from "./gameScreen";
-import RulesPage from "./rulesPage";
-import GameHeader from "./gameHeader";
+import RulesPage from "./rulesScreen";
 import GameOver from "./gameOver";
+import Header from "../common/header";
 
 class GameContainer extends Component {
   state = {
@@ -61,21 +60,22 @@ class GameContainer extends Component {
   startTimer = () => {
     this.setState({ gameStarted: true });
     this.myInterval = setInterval(() => {
-      const { timer } = this.state;
+      const { timer, gameStarted, score } = this.state;
       if (timer > 0) {
         this.setState(({ timer }) => ({
           timer: timer - 1,
         }));
       }
-      if (timer === 0 || !this.state.gameStarted) {
+      if (timer === 0 || !gameStarted) {
         clearInterval(this.myInterval);
-        this.handleGameOver(true, this.state.score);
+        this.handleGameOver(true, score);
       }
     }, 1000);
   };
 
   handleSubmitGuess = () => {
-    let { synonyms, userGuess, score, lives } = this.state;
+    let { synonyms, userGuess, score, lives, currentWord } = this.state;
+    const { user } = this.props;
 
     if (synonyms.includes(userGuess)) {
       score += 1;
@@ -84,13 +84,8 @@ class GameContainer extends Component {
       lives -= 1;
       this.setState({ lives, userGuess: "" });
 
-      if (this.props.user) {
-        const wrongWord = {};
-        wrongWord.word = this.state.currentWord;
-        const filtered = synonyms.filter((synonym) => synonym.indexOf(" ") < 0);
-        wrongWord.synonyms = filtered.slice(0, 3);
-        console.log(wrongWord.synonyms);
-        addWrongWord(wrongWord, this.props.user._id);
+      if (user) {
+        addWrongWordToDb(currentWord, synonyms, user._id);
       }
     }
 
@@ -145,11 +140,14 @@ class GameContainer extends Component {
           style={{ height: "420px" }}
         >
           {!this.state.gameOver && (
-            <GameHeader
-              handleGameTab={this.handleGameTab}
-              handleRulesTab={this.handleRulesTab}
+            <Header
+              titleOne={"Word Association Game"}
+              titleTwo={"Rules"}
+              handleTabOne={this.handleGameTab}
+              handleTabTwo={this.handleRulesTab}
             />
           )}
+
           {!this.state.gameOver &&
             ((this.state.gamePageSelected && (
               <GameScreen

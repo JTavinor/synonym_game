@@ -23,8 +23,9 @@ class GameScreen extends Component {
   };
 
   formatTime = () => {
-    let minutes = Math.floor(this.props.timer / 60);
-    let seconds = this.props.timer - minutes * 60;
+    const { timer: currentTime } = this.props;
+    let minutes = Math.floor(currentTime / 60);
+    let seconds = currentTime - minutes * 60;
     if (seconds < 10) {
       seconds = "0" + seconds.toString();
     }

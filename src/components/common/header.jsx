@@ -1,25 +1,25 @@
 import React, { Component } from "react";
 
-class GameHeader extends Component {
+class Header extends Component {
   state = {};
   render() {
     return (
       <div className="row">
         <button
           className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-left"
-          onClick={() => this.props.handleGameTab()}
+          onClick={() => this.props.handleTabOne()}
         >
-          Word Association Game
+          {this.props.titleOne}
         </button>
         <button
           className="col-6 d-flex justify-content-center text-center py-2 border bg-secondary text-white rounded-right"
-          onClick={() => this.props.handleRulesTab()}
+          onClick={() => this.props.handleTabTwo()}
         >
-          Rules
+          {this.props.titleTwo}
         </button>
       </div>
     );
   }
 }
 
-export default GameHeader;
+export default Header;

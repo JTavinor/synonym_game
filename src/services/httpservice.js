@@ -49,7 +49,13 @@ export async function registerUser(userName, password) {
   loginUser(userName, password);
 }
 
-export function addWrongWord(wrongWord, userId) {
+export function addWrongWordToDb(currentWord, synonyms, userId) {
+  const wrongWord = {};
+  wrongWord.word = currentWord;
+  const filtered = synonyms.filter((synonym) => synonym.indexOf(" ") < 0);
+  wrongWord.synonyms = filtered.slice(0, 3);
+  console.log(wrongWord.synonyms);
+
   axios.put("http://localhost:5000/users/", {
     wrongWord,
     userId,

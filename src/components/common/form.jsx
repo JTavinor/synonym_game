@@ -4,7 +4,7 @@ import Joi from "joi-browser";
 class Form extends Component {
   state = { userData: {}, errors: {} };
 
-  validate = () => {
+  validateForm = () => {
     const options = {
       abortEarly: false,
     };
@@ -23,12 +23,12 @@ class Form extends Component {
     return errors;
   };
 
-  validateProperty = ({ name, value }) => {
+  validateProperty = ({ name: fieldName, value }) => {
     const obj = {
-      [name]: value,
+      [fieldName]: value,
     };
     const fieldSchema = {
-      [name]: this.props.schema[name],
+      [fieldName]: this.props.schema[fieldName],
     };
     const result = Joi.validate(obj, fieldSchema);
     return result.error ? result.error.details[0].message : null;
@@ -37,7 +37,7 @@ class Form extends Component {
   handleFormChange = ({ currentTarget: input }) => {
     const errors = { ...this.state.errors };
     const errorMessage = this.validateProperty(input);
-    //Cannot get Joi validation for password confirmation working onChange
+    //Cannot get Joi validation for 'Password Confirmation' field  working on Input change so have done it manually
     if (this.state.userData.password === input.value) delete errors[input.name];
     else if (errorMessage) errors[input.name] = errorMessage;
     else delete errors[input.name];
@@ -66,69 +66,42 @@ class Form extends Component {
     }
   };
 
-  render() {
+  renderInputs = () => {
+    const { inputData } = this.props;
     const { errors } = this.state;
+    return inputData.map((input) => (
+      <div className="form-group col-8 justify-content-center m-auto py-3">
+        <label htmlFor={input.name}>{input.title}</label>
+        <input
+          name={input.name}
+          type={input.type}
+          className="form-control"
+          id={input.name}
+          placeholder={input.placeholder}
+          onChange={this.handleFormChange}
+          onKeyPress={this.handleEnterPress}
+        />
+        {inputData.indexOf(input) === 0 && this.state.submitErrors && (
+          <div className="alert alert-danger">{this.state.submitErrors}</div>
+        )}
+        {errors[input.name] && (
+          <div className="alert alert-danger">{errors[input.name]}</div>
+        )}
+      </div>
+    ));
+  };
+
+  render() {
+    const { title } = this.props;
     return (
       <React.Fragment>
-        <h1 className="row justify-content-center mt-2">{this.props.title}</h1>
-        <div className="form-group col-8 justify-content-center m-auto py-3">
-          <label htmlFor="exampleInputEmail1">Username</label>
-          <input
-            name="userName"
-            type="text"
-            className="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Enter username"
-            onChange={this.handleFormChange}
-            onKeyPress={this.handleEnterPress}
-          />
-          {(this.state.submitErrors && (
-            <div className="alert alert-danger">{this.state.submitErrors}</div>
-          )) ||
-            (errors.userName && (
-              <div className="alert alert-danger">{errors.userName}</div>
-            ))}
-        </div>
-        <div className="form-group col-8 justify-content-center m-auto py-3">
-          <label htmlFor="exampleInputPassword1">Password</label>
-          <input
-            name="password"
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            onChange={this.handleFormChange}
-            onKeyPress={this.handleEnterPress}
-          />
-          {errors.password && (
-            <div className="alert alert-danger">{errors.password}</div>
-          )}
-        </div>
+        <h1 className="row justify-content-center mt-2">{title}</h1>
 
-        {this.props.title === "Register" && (
-          <div className="form-group col-8 justify-content-center m-auto py-3">
-            <label htmlFor="exampleInputPassword1"> Re-Enter Password</label>
-            <input
-              name="password_confirmation"
-              type="password"
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Re-Enter Password"
-              onChange={this.handleFormChange}
-              onKeyPress={this.handleEnterPress}
-            />
-            {errors.password_confirmation && (
-              <div className="alert alert-danger">
-                {errors.password_confirmation}
-              </div>
-            )}
-          </div>
-        )}
+        {this.renderInputs()}
 
         <button
           className="btn btn-primary mb-4  my-2 mx-auto col-4 p-auto"
-          disabled={this.validate()}
+          disabled={this.validateForm()}
           onClick={() =>
             this.handleSubmit(
               this.state.userData.userName,
@@ -136,7 +109,7 @@ class Form extends Component {
             )
           }
         >
-          {this.props.title}
+          {title}
         </button>
       </React.Fragment>
     );

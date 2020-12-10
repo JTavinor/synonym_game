@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import { deleteScore } from "../../services/httpservice";
+import Table from "./table";
 
-class Leaderboard extends Component {
+class Leaderboard extends Table {
   constructor(props) {
     super(props);
     const {
-      data: leaderboardData,
+      data: data,
       searchbar,
       pagination,
       title,
@@ -16,18 +17,18 @@ class Leaderboard extends Component {
     } = this.props;
 
     // Data is ordered on backend, so just need to iterate through data and add a ranking number
-    for (let i = 0; i < leaderboardData.length; i++) {
-      leaderboardData[i].rank = i + 1;
-      // leaderboardData[i].date = leaderboardData[i].date.slice(0, 10);
+    for (let i = 0; i < data.length; i++) {
+      data[i].rank = i + 1;
+      // data[i].date = data[i].date.slice(0, 10);
     }
 
     // let pageLength = 0;
-    // if (leaderboardData.length <= 25) {
+    // if (data.length <= 25) {
     //   pageLength = 5;
-    // } else pageLength = Math.ceil(leaderboardData.length / 5);
+    // } else pageLength = Math.ceil(data.length / 5);
 
     this.state = {
-      leaderboardData,
+      data,
       searchbar,
       pagination,
       title,
@@ -46,153 +47,15 @@ class Leaderboard extends Component {
     this.renderSortIcon("rank");
   };
 
-  handleSearchQuery = (e) => {
-    const searchQuery = e.currentTarget.value;
-    this.setState({ searchQuery, currentPage: 1 });
-  };
-
-  handleSortColumns(currentColumn) {
-    let { leaderboardData, columns, sortable } = this.state;
-
-    if (sortable === false) return;
-
-    if (!columns[currentColumn]) {
-      let sortedTable = _.orderBy(leaderboardData, [currentColumn], ["asc"]);
-      columns[currentColumn] = true;
-      this.setState({ leaderboardData: sortedTable, columns });
-    } else {
-      let sortedTable = _.orderBy(leaderboardData, [currentColumn], ["desc"]);
-      columns[currentColumn] = false;
-      this.setState({ leaderboardData: sortedTable, columns });
-    }
-    this.setState({ currentColumn });
-  }
-
-  renderPaginationButtons() {
-    let { leaderboardData, searchQuery, pageLength } = this.state;
-
-    leaderboardData = leaderboardData.filter((row) =>
-      row.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const pageSelectButtons = [];
-    // for (let i = 1; i <= Math.ceil(leaderboardData.length / pageLength); i++)
-    const { pageRange } = this.state;
-
-    if (pageRange[1] >= 6 && this.state.currentPage > 1) {
-      pageSelectButtons.push(
-        <button
-          className="btn mx-1 btn-info"
-          key="Fwd"
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({ currentPage: this.state.currentPage - 1 });
-            pageRange[0] -= 1;
-            pageRange[1] -= 1;
-            this.setState({ pageRange });
-          }}
-        >
-          {"<<"}
-        </button>
-      );
-    }
-
-    if (Math.ceil(leaderboardData.length / pageLength) < pageRange[1]) {
-      var topButtonNumber = Math.ceil(leaderboardData.length / pageLength);
-    } else {
-      topButtonNumber = pageRange[1];
-    }
-    for (
-      let i = pageRange[0];
-      // i <= Math.ceil(leaderboardData.length / pageLength);
-      i <= topButtonNumber;
-      i++
-    ) {
-      if (Math.ceil(leaderboardData.length / pageLength) === 1) return;
-      let classes = "btn mx-1 btn-";
-      classes += this.state.currentPage === i ? "success" : "primary";
-
-      pageSelectButtons.push(
-        <button
-          key={i}
-          className={classes}
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({ currentPage: i });
-          }}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    if (
-      pageRange[1] < Math.ceil(leaderboardData.length / pageLength) &&
-      this.state.currentPage < Math.ceil(leaderboardData.length / pageLength)
-    ) {
-      pageSelectButtons.push(
-        <button
-          className="btn mx-1 btn-info"
-          key="back"
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({ currentPage: this.state.currentPage + 1 });
-            pageRange[0] += 1;
-            pageRange[1] += 1;
-            this.setState({ pageRange });
-          }}
-        >
-          {">>"}
-        </button>
-      );
-    }
-
-    return pageSelectButtons;
-  }
-
-  renderSortIcon(colName) {
-    const { currentColumn, columns } = this.state;
-    if (currentColumn !== colName) return null;
-    if (columns[colName]) {
-      return <i className="fa fa-sort-asc"></i>;
-    }
-    return <i className="fa fa-sort-desc"></i>;
-  }
-
-  renderTableHeader(headers) {
-    const tableHeader = [];
-    const width = { rank: "15%", name: "20%", score: "15%", date: "20%" };
-    headers.forEach((header) => {
-      tableHeader.push(
-        <th
-          scope="col"
-          style={{ width: width[header] }}
-          onClick={() => this.handleSortColumns(header)}
-          key={header}
-        >
-          {_.capitalize(header)}
-          {this.state.sortable && this.renderSortIcon(header)}
-        </th>
-      );
-    });
-    if (this.state.deleteButton)
-      tableHeader.push(
-        <th scope="col" key="delete">
-          Delete Score
-        </th>
-      );
-    return tableHeader;
-  }
-
   renderTable = () => {
-    let { leaderboardData, searchQuery, currentPage, pageLength } = this.state;
+    let { data, searchQuery, currentPage, pageLength } = this.state;
 
-    leaderboardData = leaderboardData
+    data = data
       .filter((x) => x.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .slice(pageLength * currentPage - pageLength, pageLength * currentPage);
 
-    return leaderboardData.map((currentRow) => (
-      <tr key={leaderboardData.indexOf(currentRow) + 1}>
+    return data.map((currentRow) => (
+      <tr key={data.indexOf(currentRow) + 1}>
         <th scope="col" key={"rank" + currentRow._id}>
           {currentRow.rank}
         </th>
@@ -230,6 +93,13 @@ class Leaderboard extends Component {
   };
 
   render() {
+    const {
+      data,
+      searchQuery,
+      pageLength,
+      pageRange,
+      currentPage,
+    } = this.state;
     return (
       <div
         className="container col-sm- mt-5 mb-2 bg-light d-flex py-3 flex-column mx-auto"
@@ -254,7 +124,14 @@ class Leaderboard extends Component {
         </table>
         {this.state.pagination && (
           <ul className="list-group list-group-horizontal mt-2 row justify-content-center">
-            {this.renderPaginationButtons()}
+            {this.renderPaginationButtons(
+              data,
+              searchQuery,
+              pageLength,
+              pageRange,
+              currentPage,
+              "name"
+            )}
           </ul>
         )}
       </div>

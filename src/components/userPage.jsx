@@ -26,7 +26,7 @@ class UserPage extends Component {
             data={userScores}
             searchbar={false}
             pagination={true}
-            title={`${userScores[0].name}'s Scores`}
+            // title={`${userScores[0].name}'s Scores`}
             sortable={true}
           />
         )}

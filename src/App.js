@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
 import NavBar from "./components/navbar";
-import Login from "./components/login";
+import Login from "./components/loginPage";
 import axios from "axios";
 import UserPage from "./components/userPage";
 import LeaderBoardPage from "./components/leaderboardPage";

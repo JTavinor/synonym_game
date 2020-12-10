@@ -48,30 +48,27 @@ class GameOver extends Component {
   };
 
   renderScoreMessage = () => {
-    const { data } = this.props;
-    const thirdOfLeaderboardLength = data.length / 3;
-    const rank = data.findIndex(
-      (element) => element.score === this.props.score
-    );
-    if (rank <= thirdOfLeaderboardLength) {
+    const { data, score } = this.props;
+    const topThird = data.length / 3;
+    const rank = data.findIndex((element) => element.score === score);
+    if (rank <= topThird) {
       return (
         <React.Fragment>
-          You're a genius! You ranked {rank + 1} out of{" "}
-          {thirdOfLeaderboardLength * 3}
+          Top effort! You ranked {rank + 1} out of {topThird * 3}
         </React.Fragment>
       );
     }
-    if (thirdOfLeaderboardLength < rank <= thirdOfLeaderboardLength * 2) {
+    if (topThird < rank <= topThird * 2) {
       return (
         <React.Fragment>
-          Not bad! You ranked {rank + 1} out of {thirdOfLeaderboardLength * 3}
+          Not bad! You ranked {rank + 1} out of {topThird * 3}
         </React.Fragment>
       );
     }
-    if (thirdOfLeaderboardLength * 2 < rank <= thirdOfLeaderboardLength * 3) {
+    if (topThird * 2 < rank <= topThird * 3) {
       return (
         <React.Fragment>
-          Dummy! You ranked {rank + 1} out of {thirdOfLeaderboardLength * 3}
+          Better luck next time! You ranked {rank + 1} out of {topThird * 3}
         </React.Fragment>
       );
     }
@@ -84,14 +81,12 @@ class GameOver extends Component {
         <h2 className="row justify-content-center text-capitalize display-4 mt-4">
           Game Over
         </h2>
-        {/* <div className="row justify-content-md-center mt-auto"> */}
         <h2 className="row justify-content-center my-4">
           You scored {score} points
         </h2>
         <h4 className="row justify-content-center">
           {this.renderScoreMessage()}
         </h4>
-        {/* </div> */}
 
         {(userLoggedIn && this.renderLoggedInGameOver()) ||
           this.renderAnonGameOver()}

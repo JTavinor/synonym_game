@@ -32,11 +32,9 @@ class HomePage extends Component {
           user={this.props.user}
           refreshLeaderboard={this.getLeaderboardData}
         />
-        {!data ? (
-          <div></div>
-        ) : (
+        {data && (
           <Leaderboard
-            data={this.state.data}
+            data={data}
             searchbar={false}
             pagination={false}
             title={"Top 5 scores"}
