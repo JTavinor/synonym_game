@@ -30,7 +30,7 @@ class NavBar extends Component {
             {user && (
               <React.Fragment>
                 <li className="nav-item">
-                  <a className="nav-link" href="/userpage">
+                  <a className="nav-link" href="/personalPage">
                     {user.userName}
                   </a>
                 </li>

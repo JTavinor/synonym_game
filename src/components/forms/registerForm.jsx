@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { registerUser } from "../../services/httpservice";
+import { registerUser } from "../../services/userServices";
 import Form from "../common/form";
 import Joi from "joi-browser";
 
@@ -23,7 +23,6 @@ class RegisterForm extends Component {
             <ul className="list ">
               <li className="item">Look back through wrong answers</li>
               <li className="item">Allows you to delete your scores</li>
-              <li className="item">Personalised Stats!</li>
             </ul>
           </div>
         </div>

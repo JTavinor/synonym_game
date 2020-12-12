@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import getRandomWord from "random-words";
 import {
-  addWrongWordToDb,
   getLeaderboard,
-  getWordData,
   postAnonScore,
   postUserScore,
-} from "../../services/httpservice";
+} from "../../services/leaderboardServices";
+import { getWordData } from "../../services/wordServices";
+import { addWrongWordToDb } from "../../services/userServices";
 import GameScreen from "./gameScreen";
 import RulesPage from "./rulesScreen";
-import GameOver from "./gameOver";
+import GameOver from "./gameOverScreen";
 import Header from "../common/header";
 
 class GameContainer extends Component {

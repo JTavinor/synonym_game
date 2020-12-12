@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import RegisterForm from "./forms/registerForm";
-import LoginForm from "./forms/loginForm";
-import Header from "./common/header";
+import RegisterForm from "../forms/registerForm";
+import LoginForm from "../forms/loginForm";
+import Header from "../common/header";
 
 class Login extends Component {
   state = { loginSelected: true };

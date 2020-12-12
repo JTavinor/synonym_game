@@ -1,18 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
 import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom";
-import NavBar from "./components/navbar";
-import Login from "./components/loginPage";
-import axios from "axios";
-import UserPage from "./components/userPage";
-import LeaderBoardPage from "./components/leaderboardPage";
-import PersonalPage from "./components/personalPage";
-import HomePage from "./components/homePage";
 import jwtDecode from "jwt-decode";
-
-// axios.defaults.headers.common["x-auth-token"] = localStorage.getItem(
-//   "x-auth-token"
-// );
+import NavBar from "./components/common/navbar";
+import Login from "./components/pages/loginPage";
+import UserPage from "./components/pages/userPage";
+import LeaderBoardPage from "./components/pages/leaderboardPage";
+import PersonalPage from "./components/pages/personalPage";
+import HomePage from "./components/pages/homePage";
 
 class App extends Component {
   state = {};
@@ -22,9 +17,6 @@ class App extends Component {
       try {
         const jwt = localStorage.getItem("x-auth-token");
         const user = jwtDecode(jwt);
-        // const user = await axios.get("http://localhost:5000/users/me", {
-        //   headers: { "x-auth-token": jwt },
-        // });
         this.setState({ user });
       } catch (ex) {
         return null;
@@ -43,35 +35,26 @@ class App extends Component {
     return (
       <React.Fragment>
         <div className="body">
-          <NavBar handleLogout={this.handleLogout} user={user} />
+          <header>
+            <NavBar handleLogout={this.handleLogout} user={user} />
+          </header>
           <main>
             <BrowserRouter>
               <Switch>
                 {user && (
-                  <Redirect from={`/users/${user._id}`} exact to="/userpage" />
+                  <Redirect
+                    from={`/users/${user._id}`}
+                    exact
+                    to="/personalPage"
+                  />
                 )}
                 <Route path="/users/:id" component={UserPage} />
-                <Route
-                  path="/leaderboard"
-                  exact
-                  render={(props) => (
-                    <LeaderBoardPage
-                      {...props}
-                      apiRoute={
-                        "http://localhost:5000/leaderboard/fullLeaderboard"
-                      }
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/login"
-                  render={(props) => <Login {...props} user={user} />}
-                />
+                <Route path="/leaderboard" component={LeaderBoardPage} />
+                <Route path="/login" component={Login} />
                 {user && (
                   <Route
                     exact
-                    path="/userpage"
+                    path="/personalPage"
                     render={(props) => <PersonalPage {...props} user={user} />}
                   />
                 )}
@@ -82,19 +65,7 @@ class App extends Component {
               </Switch>
             </BrowserRouter>
           </main>
-          <footer
-            style={
-              //   {
-              //   width: "100%",
-              //   textAlign: "center",
-              //   backgroundColor: "lightgray",
-              //   marginTop: "35px",
-              // }
-              {}
-            }
-          >
-            A Joe Tavinor Production
-          </footer>{" "}
+          <footer>A Joe Tavinor Web Game</footer>{" "}
         </div>
       </React.Fragment>
     );

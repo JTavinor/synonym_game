@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import GameContainer from "./game/gameContainer";
-import Leaderboard from "./common/leaderboard";
-import { getLeaderboard } from "../services/httpservice";
+import GameContainer from "../game/gameContainer";
+import Leaderboard from "../tables/leaderboardTable";
+import { getLeaderboard } from "../../services/leaderboardServices";
 
 class HomePage extends Component {
   state = {};

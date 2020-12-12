@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { loginUser } from "../../services/httpservice";
+import { loginUser } from "../../services/authServices";
 import Form from "../common/form";
 import Joi from "joi-browser";
 
