@@ -75,7 +75,7 @@ class Leaderboard extends Table {
               className="btn btn-danger btn-sm"
               onClick={() => {
                 deleteScore(currentRow._id);
-                this.props.refreshLeaderboard();
+                // this.props.refreshLeaderboard();
                 window.location.reload();
               }}
             >
