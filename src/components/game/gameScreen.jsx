@@ -58,7 +58,7 @@ class GameScreen extends Component {
                 type="text"
                 className="form-control col-8 mx-1 focus"
                 id="synonymGuess"
-                placeholder="Synonym Guess"
+                placeholder="Associated word guess"
                 value={this.props.userGuess}
                 onChange={(e) => this.props.handleInputChange(e)}
                 onKeyPress={this.handleEnterPress}
