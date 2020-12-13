@@ -7,10 +7,9 @@ class Table extends Component {
   // Filters table data by the search query
   filterData() {
     const { filterColumn, data, searchQuery } = this.state;
-    // return data.filter((row) =>
-    //   row[filterColumn].toLowerCase().includes(searchQuery.toLowerCase())
-    // );
-    return data;
+    return data.filter((row) =>
+      row[filterColumn].toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   directionButtonPush = (direction) => {

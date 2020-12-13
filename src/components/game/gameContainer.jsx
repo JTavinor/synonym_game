@@ -77,7 +77,7 @@ class GameContainer extends Component {
     let { synonyms, userGuess, score, lives, currentWord } = this.state;
     const { user } = this.props;
 
-    if (synonyms.includes(userGuess)) {
+    if (synonyms.includes(userGuess.toLowerCase())) {
       score += 1;
       this.setState({ score, userGuess: "" });
     } else {
