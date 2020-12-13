@@ -8,7 +8,7 @@ const RulesPage = () => {
           <u>Rules of the game</u>
         </h1>
       </div>
-      <div className="row justify-content-md-center align-items-center h-50">
+      <div className="row justify-content-md-center align-items-center overflow-auto">
         <ul>
           <li>
             For each word that appears on the screen, you need to give a word
