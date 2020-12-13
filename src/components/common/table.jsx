@@ -162,12 +162,14 @@ class Table extends Component {
             onChange={(e) => this.handleSearchQuery(e)}
           ></input>
         )}
-        <table className="table table-striped m-auto w-100">
-          <thead>
-            <tr>{this.renderTableHeader()}</tr>
-          </thead>
-          <tbody>{this.renderTableBody()}</tbody>
-        </table>
+        <div className="table-responsive">
+          <table className="table table-striped m-auto w-100">
+            <thead>
+              <tr>{this.renderTableHeader()}</tr>
+            </thead>
+            <tbody>{this.renderTableBody()}</tbody>
+          </table>
+        </div>
         {pagination && (
           <ul className="list-group list-group-horizontal mt-2 row justify-content-center">
             {this.renderPaginationButtons()}
