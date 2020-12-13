@@ -58,14 +58,14 @@ class GameOver extends Component {
         </React.Fragment>
       );
     }
-    if (topThird < rank <= topThird * 2) {
+    if (topThird < rank && rank <= topThird * 2) {
       return (
         <React.Fragment>
           Not bad! You ranked {rank + 1} out of {topThird * 3}
         </React.Fragment>
       );
     }
-    if (topThird * 2 < rank <= topThird * 3) {
+    if (topThird * 2 < rank && rank <= topThird * 3) {
       return (
         <React.Fragment>
           Better luck next time! You ranked {rank + 1} out of {topThird * 3}
