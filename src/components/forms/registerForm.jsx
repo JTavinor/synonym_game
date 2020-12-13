@@ -21,8 +21,16 @@ class RegisterForm extends Component {
         <div className="row justify-content-center my-3">
           <div className="col-xs-12 center-block align">
             <ul className="list ">
-              <li className="item">Look back through wrong answers</li>
-              <li className="item">Allows you to delete your scores</li>
+              <li>Keep track of all your scores and wrong answers</li>
+              <li>Automatically add your scores to the leaderboard</li>
+              <li>Go to 'My Scores' on the Navbar to:</li>
+              <ul>
+                <li>See your own personal leaderboard</li>
+                <li className="item">
+                  Look at your wrong answers and see solutions
+                </li>
+                <li className="item">Delete scores from the leaderboard</li>
+              </ul>
             </ul>
           </div>
         </div>

@@ -85,9 +85,17 @@ class GameOver extends Component {
           You scored {score} points
         </h2>
         <h4 className="row justify-content-center">
-          {this.renderScoreMessage()}
+          {userLoggedIn && this.renderScoreMessage()}
         </h4>
-
+        {!userLoggedIn && (
+          <p>
+            <b>
+              Create an account to automatically upload your scores and many
+              more benefits! Find out more on the{" "}
+              {<a href="/login">registration</a>} page!
+            </b>
+          </p>
+        )}
         {(userLoggedIn && this.renderLoggedInGameOver()) ||
           this.renderAnonGameOver()}
 

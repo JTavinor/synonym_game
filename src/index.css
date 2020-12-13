@@ -37,3 +37,7 @@ main {
   flex: 1;
   margin-bottom: 20px;
 }
+
+button {
+  cursor: pointer;
+}

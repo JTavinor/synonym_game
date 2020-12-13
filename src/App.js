@@ -50,7 +50,10 @@ class App extends Component {
                 )}
                 <Route path="/users/:id" component={UserPage} />
                 <Route path="/leaderboard" component={LeaderBoardPage} />
-                <Route path="/login" component={Login} />
+                <Route
+                  path="/login"
+                  render={(props) => <Login {...props} loginSelected={true} />}
+                />
                 {user && (
                   <Route
                     exact

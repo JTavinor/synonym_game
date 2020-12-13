@@ -158,11 +158,11 @@ class Table extends Component {
             type="text"
             className="form-control col-align-self-center col-8 mx-auto my-2"
             id={title + "search"}
-            placeholder="Search Leaderboard..."
+            placeholder={`Search ${title}...`}
             onChange={(e) => this.handleSearchQuery(e)}
           ></input>
         )}
-        <table className="table table-striped m-auto">
+        <table className="table table-striped m-auto w-100">
           <thead>
             <tr>{this.renderTableHeader()}</tr>
           </thead>

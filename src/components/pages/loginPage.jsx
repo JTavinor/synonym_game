@@ -4,7 +4,7 @@ import LoginForm from "../forms/loginForm";
 import Header from "../common/header";
 
 class Login extends Component {
-  state = { loginSelected: true };
+  state = { loginSelected: false };
 
   handleLoginTab = () => {
     const loginSelected = true;

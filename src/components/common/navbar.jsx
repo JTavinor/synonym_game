@@ -31,7 +31,7 @@ class NavBar extends Component {
               <React.Fragment>
                 <li className="nav-item">
                   <a className="nav-link" href="/personalPage">
-                    {user.userName}
+                    My Scores
                   </a>
                 </li>
                 <li className="nav-item">
