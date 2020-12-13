@@ -3,12 +3,12 @@ import React from "react";
 const RulesPage = () => {
   return (
     <React.Fragment>
-      <div className="row justify-content-center pt-md-5 pt-sm-4 pt-xs-3 pb-2 h-40">
+      <div className="row justify-content-center pt-md-5 pt-sm-4 pt-xs-3 pb-2 h-40 my-1">
         <h1>
           <u>Rules of the game</u>
         </h1>
       </div>
-      <div className="row justify-content-md-center align-items-center overflow-auto">
+      <div className="row justify-content-md-center align-items-center overflow-auto ">
         <ul>
           <li>
             For each word that appears on the screen, you need to give a word

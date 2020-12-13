@@ -88,7 +88,7 @@ class GameOver extends Component {
           {userLoggedIn && this.renderScoreMessage()}
         </h4>
         {!userLoggedIn && (
-          <p>
+          <p className="row justify-content-center text-center">
             <b>
               Create an account to automatically upload your scores and many
               more benefits! Find out more on the{" "}
