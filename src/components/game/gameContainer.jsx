@@ -77,17 +77,47 @@ class GameContainer extends Component {
     let { synonyms, userGuess, score, lives, currentWord } = this.state;
     const { user } = this.props;
 
-    if (synonyms.includes(userGuess.toLowerCase())) {
-      score += 1;
-      this.setState({ score, userGuess: "" });
-    } else {
-      lives -= 1;
-      this.setState({ lives, userGuess: "" });
-
-      if (user) {
-        addWrongWordToDb(currentWord, synonyms, user._id);
+    let count = 0;
+    for (let synonym of synonyms) {
+      if (userGuess === "") {
+        lives -= 1;
+        this.setState({ lives, userGuess: "" });
+        count = 0;
+        if (user) {
+          addWrongWordToDb(currentWord, synonyms, user._id);
+        }
+        break;
+      }
+      if (synonym.includes(userGuess.toLowerCase())) {
+        score += 1;
+        this.setState({ score, userGuess: "" });
+        break;
+      }
+      count += 1;
+      if (count === synonyms.length) {
+        lives -= 1;
+        this.setState({ lives, userGuess: "" });
+        count = 0;
+        if (user) {
+          addWrongWordToDb(currentWord, synonyms, user._id);
+        }
       }
     }
+
+    // if (
+    //   synonyms.includes(userGuess.toLowerCase()) ||
+    //   synonyms.includes(userGuess.toLowerCase() + "s")
+    // ) {
+    //   score += 1;
+    //   this.setState({ score, userGuess: "" });
+    // } else {
+    //   lives -= 1;
+    //   this.setState({ lives, userGuess: "" });
+
+    //   if (user) {
+    //     addWrongWordToDb(currentWord, synonyms, user._id);
+    //   }
+    // }
 
     if (lives === 0) {
       return this.handleGameOver(true, score);
