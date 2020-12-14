@@ -79,7 +79,7 @@ class GameContainer extends Component {
 
     let count = 0;
     for (let synonym of synonyms) {
-      if (userGuess === "") {
+      if (userGuess.length < 3) {
         lives -= 1;
         this.setState({ lives, userGuess: "" });
         count = 0;
