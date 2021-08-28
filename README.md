@@ -1,5 +1,5 @@
 # Word Association Game
-Created using React and deployed on heroku
+Created using React with Bootstrap and deployed on heroku
 
 Give it a go at http://jtwordgame.herokuapp.com/
 
